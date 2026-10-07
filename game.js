@@ -332,27 +332,27 @@ function solvePuzzle(id,skipped=false){
 }
 
 const puzzleMeta = {
-  p0:{title:'先把箱子挪开',question:'按纸箱原标签决定去向。',requires:[],hints:['标签已经直接写明去向，不需要推理。','先看 A 箱：“学校接收”。','A→移交学校，B→拆除队，C→待确认。'],solved:'箱子分开了；接下来能逐间清点。'},
-  p1:{title:'他们为什么把名字从衣服上剪下来？',question:'先把四份记录按“换衣开始前 / 换衣开始后”分开，再看剪布签出现在什么位置。',requires:['flood_note','stock_form','wet_clothes','cutting_note'],hints:['先只看每张纸上的时间。','18:34 已经开始发库存衣；剪裁条是 18:41。','18:12—18:27 在前；18:34、18:37、18:41 都在换衣开始以后。'],solved:'换干衣已经开始，旧湿衣才被统一收走；布签是从离开本人的湿衣上剪下来的。'},
-  p2:{title:'床号和人对不上',question:'根据文字记录，把四名孩子放回事故当晚实际待过的位置；04 床当天已经停用，不能按床号直觉判断。',requires:['bed_repair','night_care','daily_issue','temp_bed_full','night_misc'],hints:['不要按床号猜，先处理“04 床停用”。','《晚间小事本》和临调页都写到小满已经睡活动室。','小满→活动室折叠床；豆豆→靠门观察位；乔乔/阿成→原寝室。'],solved:'04 床当天没人入住；小满和豆豆都在活动室，只是位置不同。'},
-  p3:{title:'三份交接写的是同一晚吗？',question:'只排“必须先发生”的关系；如果三份纸能排进同一条时间链，它们才可能在写同一次处理。',requires:['handover_pan','handover_zou','handover_he','shift_strip'],hints:['不需要精确到分钟；先抓“换衣、剪布签、缝腕带、发现错配”。','发现错配一定发生在腕带缝好以后；封南楼梯在纠正腕带以后。','上楼→换衣→剪布签→缝腕带→发现错配→封南楼梯。'],solved:'三份纸能排进同一条时间链；它们描述的处理没有互相排斥。'},
-  p3b:{title:'先把“错”分清',question:'四句话里只有两句能被现有记录同时支持；选出它们。',requires:['alias_board','group_note','wristband_a','wristband_b','temp_bed_full'],hints:['先确认“豆豆”是不是陈雨宁，再看腕带上的临时地点。','名字能对上；冲突出在“二层 / 活动室”这两个地点。','应选：两条腕带姓名都能对应本人；两条腕带的临时地点与临调页相反。'],solved:'名字没有换人；两条腕带写反的是临时地点。'},
-  p4:{title:'被留下重新核对的是谁？',question:'两条腕带的姓名没错，临时地点却与其他记录冲突。结合床位、生活观察和小名说明，把地点改回去。',requires:['wristband_a','wristband_b','doudou_name','identity_observations','clothing_followup','temp_bed_full','rework_note'],hints:['把腕带上的地点和《临时床位调整》并排。','豆豆的登记名是陈雨宁。','林小满应写“活动室折叠床”；陈雨宁应写“靠门观察位”。'],solved:'留下重核的是小满和豆豆；两条腕带拆线后，临时地点被改回各自记录。'},
-  p5:{title:'19:16 以后还能往哪走？',question:'从活动室出发，排除已经停用或无法通过的方向，选出一条当时还能连续通行的路线。',requires:['stairs_closed','lobby_water','back_key','slope_access','passage_shift','cart_note'],hints:['先排除已经停用或积水过深的方向。','南楼梯不能走；正门也不适合推车。','活动室→洗衣房→后门坡道。'],solved:'南楼梯和正门都断了路；洗衣房后的坡道当时仍能通行。'},
-  p6:{title:'正式报告漏掉了哪一段？',question:'先别判断谁更可信；按写作时间和用途，把这些句子分回“现场当时写 / 事后补写 / 正式报告”。',requires:['official_report','supp_pan','supp_zou','supp_he','gym_receive','teacher_margin','report_flow'],hints:['不要判断谁更可信，只看它是什么时候、以什么用途写的。','带“补记”“事故后”的都不是现场当时写；打印件是正式报告。','两句现场来自原值班/交接；四句事后补写；最后两句来自正式报告。'],solved:'腕带错配留在现场纸和事后补记里；正式报告只留下“二次核对无误”。'},
-  p7:{title:'每一步到底在解决什么？',question:'把六个动作与当时要解决的问题一一对应；答案只来自已经读过的文字记录。',requires:[],hints:['优先从已经改过名的锚点开始。','“剪布签”不是原因本身，先问当时衣服去了哪里。','每个动作都能在一份记录中找到直接原因。'],solved:'动作和原因已经能逐项接上；剩下的是把整晚放回时间段。'},
-  p8:{title:'把那一晚排回来',question:'把十二件事放进“进水 / 换衣 / 核对 / 转移”四个阶段；列内顺序不计，只确认事件属于哪一段。',requires:[],hints:['先放最明确的：河道水位→进水；体育馆→转移。','“乔乔指出错配”“两孩暂留”“翻生活记录”都属于核对。','库存衣、湿衣、剪布签、缝腕带都属于换衣阶段。'],solved:'四段时间能完整接上；可以往下看那一晚的完整经过。'}
+  p0:{submitLabel:'贴回箱签',hintLabel:'看一眼原标签',title:'把三张箱签放回去',question:'箱签刚才被挪到桌面上；按它们原本写的去向，放回对应纸箱。',requires:[],hints:['标签已经直接写明去向，不需要推理。','先看 A 箱：“学校接收”。','A→移交学校，B→拆除队，C→待确认。'],solved:'箱子分开了；接下来能逐间清点。'},
+  p1:{submitLabel:'按这个顺序记',hintLabel:'翻一条时间旁注',title:'他们为什么把名字从衣服上剪下来？',question:'先把四份记录按“换衣开始前 / 换衣开始后”分开，再看剪布签出现在什么位置。',requires:['flood_note','stock_form','wet_clothes','cutting_note'],hints:['先只看每张纸上的时间。','18:34 已经开始发库存衣；剪裁条是 18:41。','18:12—18:27 在前；18:34、18:37、18:41 都在换衣开始以后。'],solved:'换干衣已经开始，旧湿衣才被统一收走；布签是从离开本人的湿衣上剪下来的。'},
+  p2:{submitLabel:'把位置写回去',hintLabel:'再查一张床位记录',title:'床号和人对不上',question:'根据文字记录，把四名孩子放回事故当晚实际待过的位置；04 床当天已经停用，不能按床号直觉判断。',requires:['bed_repair','night_care','daily_issue','temp_bed_full','night_misc'],hints:['不要按床号猜，先处理“04 床停用”。','《晚间小事本》和临调页都写到小满已经睡活动室。','小满→活动室折叠床；豆豆→靠门观察位；乔乔/阿成→原寝室。'],solved:'04 床当天没人入住；小满和豆豆都在活动室，只是位置不同。'},
+  p3:{submitLabel:'合并这条时间线',hintLabel:'找一个前后关系',title:'三份交接写的是同一晚吗？',question:'只排“必须先发生”的关系；如果三份纸能排进同一条时间链，它们才可能在写同一次处理。',requires:['handover_pan','handover_zou','handover_he','shift_strip'],hints:['不需要精确到分钟；先抓“换衣、剪布签、缝腕带、发现错配”。','发现错配一定发生在腕带缝好以后；封南楼梯在纠正腕带以后。','上楼→换衣→剪布签→缝腕带→发现错配→封南楼梯。'],solved:'三份纸能排进同一条时间链；它们描述的处理没有互相排斥。'},
+  p3b:{submitLabel:'留下这两句',hintLabel:'核一次称呼',title:'错的是名字，还是地点？',question:'四句话里只有两句能和手里的记录同时成立；把那两句留下。',requires:['alias_board','group_note','wristband_a','wristband_b','temp_bed_full'],hints:['先确认“豆豆”是不是陈雨宁，再看腕带上的临时地点。','名字能对上；冲突出在“二层 / 活动室”这两个地点。','应选：两条腕带姓名都能对应本人；两条腕带的临时地点与临调页相反。'],solved:'名字没有换人；两条腕带写反的是临时地点。'},
+  p4:{submitLabel:'改回临时位置',hintLabel:'翻床位旁页',title:'被留下重新核对的是谁？',question:'两条腕带的姓名没错，临时地点却与其他记录冲突。结合床位、生活观察和小名说明，把地点改回去。',requires:['wristband_a','wristband_b','doudou_name','identity_observations','clothing_followup','temp_bed_full','rework_note'],hints:['把腕带上的地点和《临时床位调整》并排。','豆豆的登记名是陈雨宁。','林小满应写“活动室折叠床”；陈雨宁应写“靠门观察位”。'],solved:'留下重核的是小满和豆豆；两条腕带拆线后，临时地点被改回各自记录。'},
+  p5:{submitLabel:'圈出这条路',hintLabel:'再看一个出口条件',title:'19:16 以后还能往哪走？',question:'从活动室出发，排除已经停用或无法通过的方向，选出一条当时还能连续通行的路线。',requires:['stairs_closed','lobby_water','back_key','slope_access','passage_shift','cart_note'],hints:['先排除已经停用或积水过深的方向。','南楼梯不能走；正门也不适合推车。','活动室→洗衣房→后门坡道。'],solved:'南楼梯和正门都断了路；洗衣房后的坡道当时仍能通行。'},
+  p6:{submitLabel:'归回原页',hintLabel:'看一眼写作时间',title:'正式报告漏掉了哪一段？',question:'这些句子写在不同时间。按纸张本身的时间和用途，把它们放回“现场当时写 / 事后补写 / 正式报告”。',requires:['official_report','supp_pan','supp_zou','supp_he','gym_receive','teacher_margin','report_flow'],hints:['先看日期和纸张用途；内容像不像真话，不是这一题要分的。','带“补记”“事故后”的都不是现场当时写；打印件是正式报告。','两句现场来自原值班/交接；四句事后补写；最后两句来自正式报告。'],solved:'腕带错配留在现场纸和事后补记里；正式报告只留下“二次核对无误”。'},
+  p7:{submitLabel:'接好这六组关系',hintLabel:'翻一个直接原因',title:'这些动作当时在处理什么？',question:'把六个动作和它们当时要处理的麻烦接起来；只用已经读过的记录。',requires:[],hints:['优先从已经改过名的锚点开始。','“剪布签”不是原因本身，先问当时衣服去了哪里。','每个动作都能在一份记录中找到直接原因。'],solved:'动作和原因已经能逐项接上；剩下的是把整晚放回时间段。'},
+  p8:{submitLabel:'收起这张时间表',hintLabel:'再看一个阶段',title:'把那一晚排回来',question:'把十二件事放回“进水 / 换衣 / 核对 / 转移”四段；同一段里不要求再排分钟。',requires:[],hints:['先放最明确的：河道水位→进水；体育馆→转移。','“乔乔指出错配”“两孩暂留”“翻生活记录”都属于核对。','库存衣、湿衣、剪布签、缝腕带都属于换衣阶段。'],solved:'四段时间能完整接上；可以往下看那一晚的完整经过。'}
 };
 
 function missingRecords(meta){return (meta.requires||[]).filter(id=>!state.records.includes(id));}
 function recordsNeededHtml(ids){
   const count=ids.length;
-  return `<div class="puzzle material missing-material"><strong>这里还缺${count}份能互相对照的文字记录。</strong><p>先把当前房间和已经开放的位置翻完；读过的纸会一直留在右侧记录里。</p><p class="small">如果来回找不到，再用提示；提示会指向关系，不会直接替你作答。</p></div>`;
+  return `<div class="puzzle material missing-material"><strong>这里还缺${count}份能互相对照的文字记录。</strong><p>先把当前房间和已经开放的位置翻完；读过的纸会留在“记录”里。</p><p class="small">实在接不上，再翻提示；它只指出该对照哪一层关系。</p></div>`;
 }
 function puzzleShell(id,inner){
   const m=puzzleMeta[id];markPuzzleSeen(id);
   const hintLevel=state.hints[id]||0;const hint=hintLevel?`<div class="hint-box">提示 ${hintLevel}：${escapeHtml(m.hints[hintLevel-1])}</div>`:'';
-  return `<div class="puzzle puzzle-${id}" data-puzzle="${id}"><h3>${escapeHtml(m.title)}</h3><p class="question">${escapeHtml(m.question)}</p>${inner}<div class="puzzle-actions"><button class="submit" data-action="submit" data-puzzle="${id}">确认判断</button><button class="hint-btn" data-action="hint" data-puzzle="${id}">看一条提示</button></div><div class="feedback" role="status" tabindex="-1" hidden></div>${hint}</div>`;
+  return `<div class="puzzle puzzle-${id}" data-puzzle="${id}"><h3>${escapeHtml(m.title)}</h3><p class="question">${escapeHtml(m.question)}</p>${inner}<div class="puzzle-actions"><button class="submit" data-action="submit" data-puzzle="${id}">${escapeHtml(m.submitLabel||'写下判断')}</button><button class="hint-btn" data-action="hint" data-puzzle="${id}">${escapeHtml(m.hintLabel||'翻一条提示')}</button></div><div class="feedback" role="status" tabindex="-1" hidden></div>${hint}</div>`;
 }
 function solvedHtml(id){const m=puzzleMeta[id];return `<div class="puzzle solved puzzle-${id}"><h3>${escapeHtml(m.title)}</h3><div class="feedback success">${escapeHtml(m.solved||'这组关系能接得上。')}</div></div>`;}
 
@@ -379,9 +379,9 @@ function select(name,opts,prompt='请选择'){
 function renderP0(){
   const opts=[['school','移交学校'],['demo','留给拆除队'],['unsure','待确认']];
   return puzzleShell('p0',`<div class="puzzle-grid">
-    <div class="puzzle-row"><label>A 箱：学校接收</label>${select('a',opts)}</div>
-    <div class="puzzle-row"><label>B 箱：建筑维修相关</label>${select('b',opts)}</div>
-    <div class="puzzle-row"><label>C 箱：来源或去向不明</label>${select('c',opts)}</div></div>`);
+    <div class="puzzle-row"><label>A 箱签：学校接收</label>${select('a',opts)}</div>
+    <div class="puzzle-row"><label>B 箱签：建筑维修相关</label>${select('b',opts)}</div>
+    <div class="puzzle-row"><label>C 箱签：来源或去向不明</label>${select('c',opts)}</div></div>`);
 }
 function renderP1(){
   const opts=[['before','换衣开始前'],['after','换衣开始后']];
@@ -529,7 +529,7 @@ function currentQuestion(){
   if(!state.puzzles.p1){
     if(!visited('wardrobe')) return '活动室与服装室都开放了；先找能互相核对时间的当晚材料。';
     if(!have('flood_note','stock_form','wet_clothes','cutting_note')) return '这些布签为什么会留在这里？把同一晚的换衣、湿衣和剪裁记录找齐。';
-    return '四份记录都在手里：先后顺序能不能解释这些剪口？';
+    return '四份记录都找到了。把时间接起来，看看那些剪口出现在什么位置。';
   }
   if(!state.puzzles.p2){
     if(!visited('dorm')) return '二层寝室里还有床位与照护记录；先查清当晚实际睡位有没有变化。';
@@ -538,7 +538,7 @@ function currentQuestion(){
   }
   if(!state.puzzles.p3){
     if(!visited('records')) return '记录柜还没查完；先读三名工作人员留下的交接。';
-    if(!have('handover_pan','handover_zou','handover_he','shift_strip')) return '每张交接只写了一截；先把能确定的前后关系补齐。';
+    if(!have('handover_pan','handover_zou','handover_he','shift_strip')) return '三张交接各缺一截。先把它们能接上的地方找出来。';
     return '这些交接写法不同，它们能不能发生在同一条时间线上？';
   }
   if(!state.puzzles.p3b){
@@ -548,7 +548,7 @@ function currentQuestion(){
   }
   if(!state.puzzles.p4){
     if(!visited('laundry')) return '后勤记录还有一处没查完：洗衣房。';
-    if(!have('rework_note','identity_observations','clothing_followup')) return '返工便条写了“拆线重缝”；再找两份能确认对象的文字记录。';
+    if(!have('rework_note','identity_observations','clothing_followup')) return '返工便条只有“拆线重缝”。还差两张纸，才能知道写的是谁。';
     return '地点已经写反；哪两名孩子需要被留下重核？';
   }
   if(!state.puzzles.p5){
@@ -582,7 +582,7 @@ function setupObserver(){
   $$('.story-section:not([hidden])').forEach(s=>observer.observe(s));
 }
 
-function closeMobileDrawers(){[$('#leftNav'),$('#rightRecords')].forEach(x=>x.classList.remove('open'));$('#menuBtn')?.setAttribute('aria-expanded','false');}
+function closeMobileDrawers(){[$('#leftNav'),$('#rightRecords')].forEach(x=>x.classList.remove('open'));$('#menuBtn')?.setAttribute('aria-expanded','false');$('#recordsBtn')?.setAttribute('aria-expanded','false');}
 function installImageFallbacks(){
   $$('img').forEach(img=>{
     img.addEventListener('error',()=>{
@@ -614,6 +614,7 @@ function wireGlobalEvents(){
   $('#reviewBtn').addEventListener('click',()=>jumpTo('loc-lobby',true));
   $('#returnBtn').addEventListener('click',()=>{const loc=state.returnLocation;state.returnLocation=null;save();$('#returnBtn').hidden=true;if(loc)jumpTo('loc-'+loc,false);});
   $('#menuBtn').addEventListener('click',()=>{const n=$('#leftNav');n.classList.toggle('open');$('#menuBtn').setAttribute('aria-expanded',String(n.classList.contains('open')));});
+  $('#recordsBtn')?.addEventListener('click',()=>{const r=$('#rightRecords');const open=!r.classList.contains('open');closeMobileDrawers();if(open){r.classList.add('open');$('#recordsBtn').setAttribute('aria-expanded','true');}});
   $$('[data-open-drawer]').forEach(b=>b.addEventListener('click',()=>{closeMobileDrawers();$('#'+b.dataset.openDrawer).classList.add('open');}));
   $$('[data-close-drawer]').forEach(b=>b.addEventListener('click',closeMobileDrawers));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('#recordDialog').open)closeDialog($('#recordDialog'));else if($('#settingsDialog').open)closeDialog($('#settingsDialog'));else closeMobileDrawers();}});

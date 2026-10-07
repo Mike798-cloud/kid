@@ -1,6 +1,6 @@
 {
   "project": "槐湾孤儿院",
-  "build": "manga-direction-v5",
+  "build": "editorial-comic-v7",
   "format": "static-web",
   "save_version": 4,
   "build_entry": "BUILD_WINDOWS.bat -> tools/build.py",
@@ -8,9 +8,13 @@
   "video_assets": 0,
   "svg_assets_referenced": 0,
   "image_assets_referenced": 18,
+  "inline_image_slots": 17,
+  "inline_images_unique": 17,
+  "runtime_image_reuse_forbidden": true,
+  "near_duplicate_image_guard": "dHash<14 fails build",
   "record_entries_referenced": 45,
   "puzzle_count": 10,
-  "built_at_utc": "2026-10-07T08:27:29Z",
+  "built_at_utc": "2026-10-07T09:54:28Z",
   "files": [
     {
       "path": "assets/final/activity.jpg",
@@ -21,6 +25,11 @@
       "path": "assets/final/activity_beds.jpg",
       "bytes": 237195,
       "sha256": "2955eaeebba2fcc8e97abab45da12fe9f1c3228f5f41b77ced8c41ec91c142ef"
+    },
+    {
+      "path": "assets/final/afterimage.jpg",
+      "bytes": 67209,
+      "sha256": "000849fdd41c28aac793574590bd883d8c42440b9f44eaa75559521ef061a53c"
     },
     {
       "path": "assets/final/bedroom.jpg",
@@ -53,9 +62,9 @@
       "sha256": "8a05e07b3b6748a2f3e9319b2bafd19dd581059237e0be0bb6df9d7b53b5064f"
     },
     {
-      "path": "assets/final/laundry_station.jpg",
-      "bytes": 195533,
-      "sha256": "2925e8a24ea5bd1f8e2d70e7505ec7df8c8ec2cfbbd78bc9438283e06c286afd"
+      "path": "assets/final/linche_close.jpg",
+      "bytes": 165846,
+      "sha256": "d5e0a3925b6a93e490fea84c597d0c27283fadd0d7ee7c982f1b5b7f0e6b670f"
     },
     {
       "path": "assets/final/linche_portrait.jpg",
@@ -71,11 +80,6 @@
       "path": "assets/final/office_desk.jpg",
       "bytes": 241612,
       "sha256": "66502dee748749f42f3065d11b2c7bbd0dedf6c213fc16e6b36ab0977a991199"
-    },
-    {
-      "path": "assets/final/rainroom.jpg",
-      "bytes": 296391,
-      "sha256": "6b53fcbc77577d4ab6de40a394fec252298f5b87dff20569359016cbecdd4f95"
     },
     {
       "path": "assets/final/shenhe_portrait.jpg",
@@ -104,18 +108,18 @@
     },
     {
       "path": "game.js",
-      "bytes": 55205,
-      "sha256": "cd6c6a4d8add7d8e5c5805b852409a3145e297ac6d37dc971262f86edf3a2862"
+      "bytes": 56266,
+      "sha256": "fb79049c40f7cea21d165255f31856b758e3d3dcd51fff95ef9f9e0fc48131f3"
     },
     {
       "path": "index.html",
-      "bytes": 41715,
-      "sha256": "b01a8d7757269826966c2f9ee196b8455b6157cad2a66c546636580bd4e4ff5d"
+      "bytes": 41872,
+      "sha256": "bd09d5155dddbb30dda5f44fc0dd64d5440d598e10c69cf50baeb0bd6edf78f9"
     },
     {
       "path": "styles.css",
-      "bytes": 27432,
-      "sha256": "ad79e2689f46283992774f92f72c2ef3ed713fad4631969bdcc8f0a59c1276cb"
+      "bytes": 42729,
+      "sha256": "ee45f326efb64a1c41e050d0154698cbaea9da6d04054791378d82ec1e300659"
     }
   ]
 }
