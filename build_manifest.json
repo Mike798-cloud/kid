@@ -1,0 +1,98 @@
+{
+  "project": "槐湾孤儿院",
+  "build": "strict-optimization-r4",
+  "format": "static-web",
+  "save_version": 3,
+  "audio_assets": 0,
+  "video_assets": 0,
+  "svg_assets_referenced": 0,
+  "image_assets_referenced": 14,
+  "built_at_utc": "2026-10-07T05:19:00Z",
+  "files": [
+    {
+      "path": "assets/generated/activity_detail.jpg",
+      "bytes": 161490,
+      "sha256": "02c95e04b96f52cd74e2f943c5f86ef42950bb01f3ce5d661a4ac2c1c1e8926e"
+    },
+    {
+      "path": "assets/generated/bedroom.jpg",
+      "bytes": 177735,
+      "sha256": "a24cf227e0498ba7fa76b83534da88f5e4861e366c8f3f9b22d2a7b5ede54719"
+    },
+    {
+      "path": "assets/generated/corridor_clean.jpg",
+      "bytes": 142067,
+      "sha256": "9f5932262decbc44d6f146192c1fb9f7f8d9f5342be2e20b0506f0d7f6941819"
+    },
+    {
+      "path": "assets/generated/cover.jpg",
+      "bytes": 185346,
+      "sha256": "d94d8614e1143042ce18cd2099fdb6af4eeed9a086c9a68d43b54cb8c37e0971"
+    },
+    {
+      "path": "assets/generated/exit_new.jpg",
+      "bytes": 57043,
+      "sha256": "917abd53c4485c8b309059f6b004e056e110026f0aab8026b3fba8548e8f85d9"
+    },
+    {
+      "path": "assets/generated/gym_new.jpg",
+      "bytes": 79952,
+      "sha256": "da0c049439ee0829116c9cd56163e0e279bd814cf1bd2009b9485077cc8be091"
+    },
+    {
+      "path": "assets/generated/laundry.jpg",
+      "bytes": 116322,
+      "sha256": "a07da17bb6d1a57d3c08901ac2afa4dd3b308ece5102cfda563ed2cfcf0a4c8f"
+    },
+    {
+      "path": "assets/generated/laundry_station.jpg",
+      "bytes": 147113,
+      "sha256": "dccb242da2c0286ac0dc41d0fb171a5d7f7de0ab798901d99fe3385e99104172"
+    },
+    {
+      "path": "assets/generated/office_new.jpg",
+      "bytes": 108006,
+      "sha256": "28c01988a2cc308ac7b8f9d541bee0907ce631feb9033e43830702006a6a4ec4"
+    },
+    {
+      "path": "assets/generated/rainnight_new.jpg",
+      "bytes": 79164,
+      "sha256": "06e4f1d4113394ad68ed75136428f60f2ceaa8c5beb46ebb977754f1d081df68"
+    },
+    {
+      "path": "assets/generated/report_desk_new.jpg",
+      "bytes": 120990,
+      "sha256": "47082d2d0d7d2ec5bc350ad905db1d29f3fe324b597501374f26ee0ff3001df2"
+    },
+    {
+      "path": "assets/generated/stairs_clean.jpg",
+      "bytes": 94743,
+      "sha256": "fa3b9fb44d00cd1a66ff35904e0a9c373575c3af0217c85bdb7812c39a093874"
+    },
+    {
+      "path": "assets/generated/wardrobe_room.jpg",
+      "bytes": 160312,
+      "sha256": "e4a42a97f88153baf58a338b5068d66580236a7f6c5cbf2858e790ab700e574e"
+    },
+    {
+      "path": "assets/generated/wrist_clean.jpg",
+      "bytes": 209677,
+      "sha256": "8da4cd061ba353083f8434d68fa00040ac34c0e1b3d1c4dcbe629bea8ae4005f"
+    },
+    {
+      "path": "game.js",
+      "bytes": 54960,
+      "sha256": "514c43ad81970146a4006a2e133d1c7c57badcca54566c6d89101a2097e8d5b9"
+    },
+    {
+      "path": "index.html",
+      "bytes": 42410,
+      "sha256": "0ad23d7a85950f72bd203f3ceb02970ed91a7883d6952b3fad929162cd0fb2a0"
+    },
+    {
+      "path": "styles.css",
+      "bytes": 17557,
+      "sha256": "cb01b209aba5bec2b7f58ad3b1cae860b056962df192e19c22c04006eec2602b"
+    }
+  ]
+}

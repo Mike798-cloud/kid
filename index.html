@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101010">
+  <meta name="description" content="《槐湾孤儿院》是一款单人悬疑恐怖网页叙事解谜游戏。">
+  <title>槐湾孤儿院</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#mainGame">跳到正文</a>
+
+<section id="startScreen" class="start-screen" aria-labelledby="gameTitle">
+  <div class="start-art" aria-hidden="true"></div>
+  <div class="start-copy">
+    <p class="eyebrow">悬疑恐怖 · 网页叙事解谜</p>
+    <h1 id="gameTitle">槐湾孤儿院</h1>
+    <p class="start-meta">原槐湾儿童之家旧址 · 拆除前资料清点</p>
+    <div class="content-warning">
+      <strong>内容提示</strong>
+      <p>涉及废弃儿童福利机构、暴雨灾害、儿童短暂哭泣，以及成年人工作失误；无血腥画面、无追逐、无跳脸。</p>
+    </div>
+    <div class="start-actions">
+      <button id="startBtn" class="primary">开始</button>
+      <button id="continueBtn" class="secondary" hidden>继续</button>
+    </div>
+    <details class="start-settings">
+      <summary>阅读设置</summary>
+      <div class="settings-grid">
+        <label>文字大小
+          <select id="fontScaleStart">
+            <option value="1">标准</option><option value="1.12">较大</option><option value="1.25">大</option>
+          </select>
+        </label>
+        <label class="check"><input id="reduceMotionStart" type="checkbox"> 减少动态</label>
+      </div>
+      <p class="small">可用键盘完成全部操作；谜题没有倒计时。无音乐，所有关键信息均可直接阅读。</p>
+    </details>
+  </div>
+</section>
+
+<div id="gameShell" class="game-shell" hidden>
+  <header class="topbar">
+    <button id="menuBtn" class="icon-btn mobile-only" aria-expanded="false" aria-controls="leftNav">位置</button>
+    <div class="brand"><strong>槐湾孤儿院</strong><span id="saveLabel">门厅</span></div>
+    <button id="settingsBtn" class="icon-btn">设置</button>
+  </header>
+
+  <div class="question-line" aria-live="polite">
+    <span>林澈记下：</span><strong id="currentQuestion">这些材料该怎么分，三人才能开始清点？</strong>
+  </div>
+
+  <aside id="leftNav" class="left-nav" aria-label="看过的位置">
+    <div class="nav-head">
+      <span>看过的位置</span>
+      <button class="drawer-close mobile-only" data-close-drawer="leftNav" aria-label="关闭位置抽屉">×</button>
+    </div>
+    <nav id="anchorNav"></nav>
+  </aside>
+
+  <main id="mainGame" class="main-column" tabindex="-1">
+    <section id="loc-lobby" class="story-section" data-location="lobby">
+      <div class="section-kicker">20:08</div>
+      <h2>门厅</h2>
+      <figure class="scene-frame">
+        <img src="assets/generated/corridor_clean.jpg" alt="废弃儿童之家门厅，三个人把纸箱搬到干燥处。" fetchpriority="high">
+      </figure>
+      <p>雨是在他们进门以后才密起来的；门厅的玻璃发白，锁眼里塞着半截已经硬化的胶带；林澈把钥匙装回封口袋，先看了一眼手机。</p>
+      <p class="dialogue"><b>周野：</b>“九点锁门，是吧？”</p>
+      <p class="dialogue"><b>林澈：</b>“物业说最晚九点半。你别拖。”</p>
+      <p class="dialogue"><b>周野：</b>“我来搬箱子还叫我别拖。”</p>
+      <p class="dialogue"><b>沈禾：</b>“窗边那两个先挪。底已经湿了。”</p>
+      <p>这次清点不负责修复；能读的纸登记，能移交的装箱，剩下的交回拆除队；桌边放着三只旧纸箱，标签还算清楚。</p>
+      <div class="entry-links" aria-label="门厅可查看内容">
+        <button data-record="entry_rules">桌边登记夹</button>
+        <button data-record="box_labels">三只纸箱标签</button>
+      </div>
+      <div id="puzzle-p0" class="puzzle-slot"></div>
+    </section>
+
+    <section id="loc-activity" class="story-section gated" data-location="activity" hidden>
+      <div class="section-kicker">20:14</div>
+      <h2>活动室</h2>
+      <figure class="scene-frame">
+        <img src="assets/generated/wardrobe_room.jpg" alt="废弃活动室里还留着几张临时折叠床和旧木桌，墙面受潮剥落。" loading="lazy">
+      </figure>
+      <p>活动室的地面比门厅高半级；墙上残着一圈浅蓝色瓷砖，窗帘早拆了，只剩几枚生锈的挂钩；沈禾把纸箱放到墙中央，没贴墙。</p>
+      <p class="dialogue"><b>沈禾：</b>“这面墙在返潮。纸别靠过去。”</p>
+      <p>林澈蹲下去看箱号；再抬头时，靠窗那张折叠床像是铺着干净床单，床脚也没有锈；他眨了一下眼，那里只剩发硬的旧帆布和一层灰。</p>
+      <p>他站起来，又看了一遍。没有床单。</p>
+      <p class="dialogue"><b>周野：</b>“你看什么？”</p>
+      <p class="dialogue"><b>林澈：</b>“没事。”</p>
+      <p>柜顶还粘着几颗纸折的五角星，胶早黄了，星角一律往下耷；沈禾看了一眼，说其中一颗是旧作业纸，背面还留着半道没擦干净的竖式；她没去揭，只记下位置。</p>
+      <p>墙边摆着三张矮凳，一张凳腿用铁丝缠过。周野踢到它，凳子晃了两下，没有倒。</p>
+      <p class="dialogue"><b>周野：</b>“这里以前是不是临时睡过人？”</p>
+      <p class="dialogue"><b>沈禾：</b>“柜里还有东西，先翻完。”</p>
+      <p class="dialogue"><b>沈禾：</b>“这种别往学校送。纸一碰就散。”</p>
+      <p class="dialogue"><b>周野：</b>“那拍下来？”</p>
+      <p class="dialogue"><b>沈禾：</b>“登记就行。不是每样东西都要留。”</p>
+      <p>柜子底层还压着一本薄薄的借用簿，封皮画满铅笔印；周野翻到中间，发现记录的不是玩具，而是谁借走了蜡笔、剪刀、胶水——有几页会在名字后面多写一句：“别给她绿色，她会把整张纸涂满。”</p>
+      <p class="dialogue"><b>周野：</b>“这谁？”</p>
+      <p class="dialogue"><b>沈禾：</b>“这页是四月，离那晚太远。先放回去。”</p>
+      <p>林澈在登记本上只写了标题，没有把那句话抄进去；他把簿子原样塞回柜子，露出下面一张低龄组临时点名纸。</p>
+      <figure class="scene-frame narrow">
+        <img src="assets/generated/activity_detail.jpg" alt="活动室靠窗的几张旧折叠床，帆布发硬，床脚锈蚀。" loading="lazy">
+      </figure>
+      <p>桌面上多了一页粘在木纹里的纸；边缘已经泡软，但标题还能认出来：<em>临时床位调整</em>；正文只有几处墨色浮在水渍上面。</p>
+      <div class="entry-links">
+        <button data-record="temp_bed_partial">受潮的《临时床位调整》</button>
+        <button data-record="activity_misc">柜里留下的小东西</button>
+        <button data-record="activity_roll">低龄组临时点名纸</button>
+        <button data-record="borrow_book">旧借用簿</button>
+      </div>
+      <article id="anchor-temp-place" class="local-anchor" data-anchor="temp_place">
+        <h3 data-anchor-title="temp_place">临时睡人的地方</h3>
+        <div class="anchor-body" data-anchor-body="temp_place">
+          <p>页脚能读到一句：“低龄组暂移活动室，折叠床另记。”其余部分被水痕压住。</p>
+        </div>
+      </article>
+    </section>
+
+    <section id="loc-wardrobe" class="story-section gated" data-location="wardrobe" hidden>
+      <div class="section-kicker">20:21</div>
+      <h2>服装室</h2>
+      <figure class="scene-frame">
+        <img src="assets/generated/laundry.jpg" alt="废弃服装间里挂着旧衣，长桌和编织袋挤在墙边。" loading="lazy">
+      </figure>
+      <p>服装室比活动室冷；靠墙一排铁柜已经锈住，长桌却还能用；周野把上面压着的破塑料布掀到一边，下面露出一个掉瓷的白搪瓷盘。</p>
+      <p>盘里有几块白布。字晕得很厉害，有的只剩姓，有的只剩最后一笔。每块布边上都有剪口。</p>
+      <p class="dialogue"><b>周野：</b>“网上那帖子说的就是这个？”</p>
+      <p class="dialogue"><b>沈禾：</b>“帖子里那张图，应该就是这种布签；可它没拍旁边的湿衣袋。”</p>
+      <p>林澈把便签贴在桌沿，没有写“名字”。他写：<strong>旧姓名布签，来源未定。</strong></p>
+      <p>铁柜里还塞着几件没有拆包装的捐赠衣，尺码从 110 到 150 混在一起；最上面一包外包装印着很早停产的商场名字；周野抽出一件，对着自己比了比，很快又塞回去。</p>
+      <p class="dialogue"><b>周野：</b>“这颜色当年也不好看。”</p>
+      <p class="dialogue"><b>沈禾：</b>“你来挑校服？”</p>
+      <p>桌脚旁的编织袋内壁结着一层泥，袋口用蓝色塑料绳随手打了两个结；袋子没有任何特殊标记，倒是边角夹着一张湿衣收拢表，纸边已经粘在纤维上。</p>
+      <p class="dialogue"><b>林澈：</b>“如果是先剪名字，再换衣，顺序会完全不一样。”</p>
+      <p class="dialogue"><b>周野：</b>“所以你现在到底想查哪个？”</p>
+      <p class="dialogue"><b>林澈：</b>“先查他们为什么剪。”</p>
+      <p>长桌另一头有一本针线领用簿，页脚被剪掉一角；红线不是特殊物资，只是当年最耐拉的粗棉线；邹梅连续领过三个月，备注总是同一句：“缝厚布。”</p>
+      <p>沈禾把领用簿和搪瓷盘隔开摆：“一件东西看着吓人，不等于它在那天晚上才出现——先别把日常用品写成证据。”</p>
+      <p class="dialogue"><b>周野：</b>“那我把‘恐怖红线’四个字咽回去。”</p>
+      <p class="dialogue"><b>沈禾：</b>“最好。”</p>
+      <div class="entry-links">
+        <button data-record="stock_form">《库存衣物领用单》</button>
+        <button data-record="wet_clothes">《湿衣收拢表》</button>
+        <button data-record="cutting_note">《后勤剪裁条》</button>
+        <button data-record="flood_note">《一层进水简记》</button>
+        <button data-record="thread_ledger">《针线领用簿》</button>
+        <button data-record="donation_sizes">捐赠衣物尺码清单</button>
+      </div>
+      <article id="anchor-cloth-tags" class="local-anchor" data-anchor="cloth_tags">
+        <h3 data-anchor-title="cloth_tags">剪下来的布签</h3>
+        <div class="anchor-body" data-anchor-body="cloth_tags"><p>布边已经发白，剪口里卡着一小段暗红缝线。桌下还有一只装湿衣的编织袋。</p></div>
+      </article>
+      <div id="puzzle-p1" class="puzzle-slot"></div>
+    </section>
+
+    <section id="loc-dorm" class="story-section gated" data-location="dorm" hidden>
+      <div class="section-kicker">20:22</div>
+      <h2>二层寝室</h2>
+      <figure class="scene-frame">
+        <img src="assets/generated/bedroom.jpg" alt="二层旧寝室，几张铁床靠墙，床牌已经褪色。" loading="lazy">
+      </figure>
+      <p>寝室门开得不顺，周野用肩膀顶了一下。门后没有东西，只是地胶翘起来卡住了。</p>
+      <p class="dialogue"><b>周野：</b>“我刚才差点给一块地胶道歉。”</p>
+      <p class="dialogue"><b>林澈：</b>“你可以现在道。”</p>
+      <p>靠窗第四张床没有床板，床架上挂着一张旧维修牌；沈禾把牌子的文字念完，又去看床头柜里夹着的夜间照护页。</p>
+      <p class="dialogue"><b>沈禾：</b>“别数床。牌子写得很清楚，04 当天就停用了。”</p>
+      <p>床头柜最下面压着一张值日表；乔乔负责收晾衣夹，阿成负责把喝水杯送去消毒，小满那一栏被人画了两次圈，旁边写“又忘”；周野看了半天。</p>
+      <p class="dialogue"><b>周野：</b>“我九岁的时候也不可能记得收夹子。”</p>
+      <p class="dialogue"><b>林澈：</b>“你二十八也记不得还车钥匙。”</p>
+      <p>窗台里侧有一道铅笔线，旁边只写着“成 132”；林澈没有抄进主表；沈禾说那大概只是量身高留下的。</p>
+      <p>靠墙床头的旧纸签上，一行名字被水泡开，下面却还能看到“活动室折叠床”几个字。周野盯了半天，还是问了出来：</p>
+      <p class="dialogue"><b>周野：</b>“床在这里，为什么人写活动室？”</p>
+      <p class="dialogue"><b>林澈：</b>“这就是现在要弄清的。”</p>
+      <p>床下还有一本晚间小事本：谁把牙刷掉进水池、谁半夜踢被子、谁第二天要带作业去学校；很多字潦草得像边走边写，其中一页提到小满“睡前又问 04 床什么时候修好，她嫌活动室有人打呼”。</p>
+      <p class="dialogue"><b>周野：</b>“所以她知道自己不睡这儿？”</p>
+      <p class="dialogue"><b>沈禾：</b>“至少这页写的时候知道。看日期——就是当天。”</p>
+      <p>林澈把这一页夹到维修单后面；两个记录互相独立，却指向同一件事：04 床没人在睡，小满也已经被调走。</p>
+      <div class="entry-links">
+        <button data-record="bed_repair">《床架维修单》</button>
+        <button data-record="night_care">《夜间照护页》</button>
+        <button data-record="daily_issue">《当日物品领用条》</button>
+        <button data-record="temp_bed_full">《临时床位调整》完整页</button>
+        <button data-record="night_misc">《晚间小事本》</button>
+      </div>
+      <article id="anchor-empty-bed" class="local-anchor" data-anchor="empty_bed">
+        <h3 data-anchor-title="empty_bed">空出来的床</h3>
+        <div class="anchor-body" data-anchor-body="empty_bed"><p>04 床没有床板。旁边贴着一张维修牌，日期是事故当天上午。</p></div>
+      </article>
+      <div id="puzzle-p2" class="puzzle-slot"></div>
+    </section>
+
+    <section id="loc-records" class="story-section gated" data-location="records" hidden>
+      <div class="section-kicker">20:26</div>
+      <h2>记录柜</h2>
+      <figure class="scene-frame">
+        <img src="assets/generated/report_desk_new.jpg" alt="旧记录室里桌面散着纸页和旧办公用品，铁柜与窗框都已受潮。" loading="lazy">
+      </figure>
+      <p>记录柜的锁已经被拆过；里面不是整册档案，只有几只牛皮袋和散页；林澈把能读的按日期摊开，周野伸手想帮忙，被他拍开。</p>
+      <p class="dialogue"><b>周野：</b>“你还真护你那点顺序。”</p>
+      <p class="dialogue"><b>林澈：</b>“你一碰我就得重排。”</p>
+      <p class="dialogue"><b>沈禾：</b>“你俩先把窗关上。”</p>
+      <p>三个人留下的交接笔记长度不一样；潘琴的字最急，邹梅的字最慢，何芹中间有两行被水晕开；几张纸都提到“腕带”，但没有一张把事情从头写到尾。</p>
+      <p>同一个抽屉里还有食堂米面领用、消毒液补货、两张请假条；请假条上的日期比事故早半年，对现在的事没有帮助；林澈还是把它们按原顺序塞回去。</p>
+      <p class="dialogue"><b>周野：</b>“你连没用的也排？”</p>
+      <p class="dialogue"><b>林澈：</b>“原来怎么放，就怎么放。”</p>
+      <p class="dialogue"><b>周野：</b>“那你刚才还拍我手。”</p>
+      <p class="dialogue"><b>林澈：</b>“因为你会把没用的放进有用的里面。”</p>
+      <p>牛皮袋最里侧还夹着一张值班时间条，没有叙事，只记谁在什么时段负责哪一层；潘琴从 18:30 起在活动室，邹梅负责洗衣房与后勤库，何芹带低龄组上楼后又返回活动室；三个人的纸，至少在空间上能同时成立。</p>
+      <p>周野把三张交接并在一起看了一遍，忽然把其中一张倒过来：“这张背面还有半句话。”</p>
+      <p>背面只剩“……先别让她们回寝室”。没有主语，也没有名字。</p>
+      <p class="dialogue"><b>林澈：</b>“先记，不补。”</p>
+      <div class="entry-links">
+        <button data-record="handover_pan">潘琴交接</button>
+        <button data-record="handover_zou">邹梅交接</button>
+        <button data-record="handover_he">何芹末页</button>
+        <button data-record="shift_strip">《当晚值班时间条》</button>
+        <button data-record="back_halfline">交接页背面的半句话</button>
+      </div>
+      <article id="anchor-papers" class="local-anchor" data-anchor="papers">
+        <h3 data-anchor-title="papers">互相矛盾的纸</h3>
+        <div class="anchor-body" data-anchor-body="papers"><p>一张写“孩子拿错腕带”，另一张写“布签发反”。两句话看起来把责任推向了不同方向。</p></div>
+      </article>
+      <div id="puzzle-p3" class="puzzle-slot"></div>
+    </section>
+
+    <section id="loc-office" class="story-section gated" data-location="office" hidden>
+      <div class="section-kicker">20:31</div>
+      <h2>值班室</h2>
+      <figure class="scene-frame narrow portrait"><img src="assets/generated/office_new.jpg" alt="旧值班室的桌上摊着几份记录，窗外雨光照进半暗的房间。" loading="lazy"></figure>
+      <p>值班室只有半扇窗还能合上；桌角压着几本儿童生活记录，电话机没有线，墙上的白板被拆走，只剩四个固定螺丝。</p>
+      <p>林澈把“林小满 / 二层”和“陈雨宁 / 活动室”两条腕带抄记写到纸上，旁边再抄《临时床位调整》：小满在活动室折叠床，豆豆在靠门观察位。</p>
+      <p class="dialogue"><b>周野：</b>“等会儿——豆豆到底是不是陈雨宁？”</p>
+      <p class="dialogue"><b>沈禾：</b>“这本写得很清楚，登记名陈雨宁，小名豆豆。问题不在名字。”</p>
+      <p>桌上另一张分组便条写着：换衣后，低龄组先留活动室；需要重核的孩子不要回寝室拿东西；字旁边用铅笔画了两个空圈，没有填姓名。</p>
+      <p class="dialogue"><b>林澈：</b>“名字能对上，地点对不上。”</p>
+      <p class="dialogue"><b>周野：</b>“那就是腕带没认错人，认错了人当晚待的地方？”</p>
+      <p class="dialogue"><b>沈禾：</b>“先把姓名和地点拆开看，别搅在一起。”</p>
+      <p>窗台上有一只裂口搪瓷杯，杯底写着“值夜”；里面塞着四支早就干掉的圆珠笔；林澈试了一支，笔尖只划出一道浅痕。</p>
+      <div class="entry-links">
+        <button data-record="alias_board">《登记名 / 小名对照》</button>
+        <button data-record="group_note">《换衣后分组便条》</button>
+        <button data-record="wristband_a">临时腕带抄记 A</button>
+        <button data-record="wristband_b">临时腕带抄记 B</button>
+        <button data-record="desk_log">值班室桌面简记</button>
+      </div>
+      <div id="puzzle-p3b" class="puzzle-slot"></div>
+    </section>
+
+    <section id="loc-laundry" class="story-section gated" data-location="laundry" hidden>
+      <div class="section-kicker">20:40</div>
+      <h2>洗衣房</h2>
+      <figure class="scene-frame">
+        <img src="assets/generated/laundry_station.jpg" alt="废弃洗衣房里挂着硬化的旧衣，工作台和衣筐靠着潮墙。" loading="lazy">
+      </figure>
+      <p>洗衣房的排水沟已经堵死，地面却比别处干；最里面挂着一件灰色旧外套，布料硬得像晒过头的纸；工作台抽屉里有半卷暗红缝线，和服装室盘子里的一样。</p>
+      <p class="dialogue"><b>周野：</b>“红线、剪刀、名字。帖子素材齐了。”</p>
+      <p class="dialogue"><b>沈禾：</b>“你要写帖子，最好也把领用单一起写进去。”</p>
+      <p>桌角压着两条临时腕带的抄记；不是实物，只有后勤人员把上面的字重新抄在纸上：姓名、临时地点、缝制时间。</p>
+      <p>针线盒里有白线、黑线和半卷暗红线；红线最粗，缝厚布省事；邹梅后来在补记里写，她当晚手泡得发僵，针脚“难看得很”。</p>
+      <p class="dialogue"><b>沈禾：</b>“网上那句‘红线缝手’大概就从这儿来的。”</p>
+      <p class="dialogue"><b>周野：</b>“大概？”</p>
+      <p class="dialogue"><b>沈禾：</b>“我没在现场。”</p>
+      <p>那件灰外套的口袋里什么都没有；拉链坏了一半，袖口有一处补丁；周野说可以扔，林澈说先别动；两个人谁也没解释为什么。</p>
+      <p>针线柜最底层还有一张“返工”便条：两条腕带拆线后，旧线不要再用，重新缝；旁边写了一个极小的“乔”；沈禾没有把这个字当作姓名，只在登记里写“疑似经手人简称”。</p>
+      <p class="dialogue"><b>周野：</b>“你俩一个比一个不肯猜。”</p>
+      <p class="dialogue"><b>林澈：</b>“你猜你的，登记里别写。”</p>
+      <p>这次沈禾没接话，只把两条腕带抄记往临调页旁边推了半寸。</p>
+      <div class="entry-links">
+        <button data-record="wristband_a">临时腕带抄记 A</button>
+        <button data-record="wristband_b">临时腕带抄记 B</button>
+        <button data-record="doudou_name">豆豆登记名说明</button>
+        <button data-record="identity_observations">《低龄组生活观察页》</button>
+        <button data-record="clothing_followup">《换衣后复核便条》</button>
+        <button data-record="rework_note">《腕带返工便条》</button>
+        <button data-record="needle_box">针线柜清点页</button>
+      </div>
+      <article id="anchor-laundry-table" class="local-anchor" data-anchor="laundry_table">
+        <h3 data-anchor-title="laundry_table">红线和剪刀</h3>
+        <div class="anchor-body" data-anchor-body="laundry_table"><p>剪刀放在针线盒旁边，线头结得很粗。桌板上没有别的特殊痕迹。</p></div>
+      </article>
+      <article id="anchor-two-children" class="local-anchor" data-anchor="two_children">
+        <h3 data-anchor-title="two_children">两个孩子被留下</h3>
+        <div class="anchor-body" data-anchor-body="two_children"><p>交接里写着：“18:56，二名儿童暂留换衣桌，重新核对。”没有写名字。</p></div>
+      </article>
+      <div id="puzzle-p4" class="puzzle-slot"></div>
+    </section>
+
+    <section id="loc-stairs" class="story-section gated" data-location="stairs" hidden>
+      <div class="section-kicker">20:49</div>
+      <h2>南楼梯</h2>
+      <figure class="scene-frame">
+        <img src="assets/generated/stairs_clean.jpg" alt="南楼梯墙体有旧裂缝，入口被封条和木板拦住。" loading="lazy">
+      </figure>
+      <p>南楼梯现在被木板封着；不是事故留下的板，是后来拆除准备时钉上的；旁边那道裂缝却从二层一直走到半层平台。</p>
+      <p>林澈把几张通行记录按时间排开；门厅水位简记写到 19:12；南楼梯维修页在 19:16 盖了“停用”；后门钥匙却在 19:18 被借出。</p>
+      <p class="dialogue"><b>周野：</b>“所以他们不是往里面带。”</p>
+      <p class="dialogue"><b>林澈：</b>“先把路走通再说。”</p>
+      <p>平台上倒着一辆旧拖把车，轮子早锈死了；十九年前的后勤通行说明特地写着“坡道可过送衣推车”；单看不重要，跟门厅水位、楼梯停用时间放在一起，能走的方向一下少了大半。</p>
+      <p class="dialogue"><b>林澈：</b>“19:16以后，如果正门和南楼梯都不能走，他们只剩哪边？”</p>
+      <p class="dialogue"><b>沈禾：</b>“把钥匙登记也算进去。”</p>
+      <p>周野去试了一下封板，没有硬掰。</p>
+      <p class="dialogue"><b>周野：</b>“别担心，我今天不负责制造新的事故记录。”</p>
+      <p>半层平台贴过一张褪色的疏散示意，纸已经撕掉，只剩胶痕；林澈没拍照取证；路线判断需要的是文字记录，不是墙上残图。</p>
+      <p>后勤补页还提到一件小事：19:22 以后送衣推车先推到坡道外，免得孩子经过时绊脚；邹梅在句尾写了两个字——“太滑”。</p>
+      <p class="dialogue"><b>沈禾：</b>“这句跟路线有用。”</p>
+      <p class="dialogue"><b>周野：</b>“这回总算有一条不用猜人名的。”</p>
+      <div class="entry-links">
+        <button data-record="stairs_closed">《南楼梯维修页》</button>
+        <button data-record="lobby_water">《门厅水位简记》</button>
+        <button data-record="back_key">《后门钥匙登记》</button>
+        <button data-record="slope_access">《后勤坡道通行说明》</button>
+        <button data-record="passage_shift">《后勤通道值班补页》</button>
+        <button data-record="cart_note">《送衣推车移位条》</button>
+      </div>
+      <article id="anchor-backdoor" class="local-anchor" data-anchor="backdoor">
+        <h3 data-anchor-title="backdoor">封住的后门</h3>
+        <div class="anchor-body" data-anchor-body="backdoor"><p>后门平时不上主钥匙板，钥匙单独挂在洗衣房。事故当晚 19:18 有借出记录。</p></div>
+      </article>
+      <div id="puzzle-p5" class="puzzle-slot"></div>
+    </section>
+
+    <section id="loc-supplement" class="story-section gated" data-location="supplement" hidden>
+      <div class="section-kicker">20:58</div>
+      <h2>两份补记</h2>
+      <figure class="scene-frame">
+        <img src="assets/generated/wrist_clean.jpg" alt="棉布腕带缝在手腕上，粗线结头贴着袖口。" loading="lazy">
+      </figure>
+      <p>记录柜最下面还有一只薄牛皮袋；封面写“事故后补记”，里面只有四页；正式报告在第一页，字打得最整齐；后面三页是手写，日期都在事故以后。</p>
+      <p>正式报告只有一句和腕带有关：<strong>“转移前完成二次核对，登记无误。”</strong></p>
+      <p>潘琴的补记多了一行：“两条腕带曾发反，乔乔先提出；”邹梅写得更直接：“我把湿布签一起放盘里，潘琴拿时认错了两块。”</p>
+      <p class="dialogue"><b>林澈：</b>“正式报告没写。”</p>
+      <p class="dialogue"><b>沈禾：</b>“先看日期。补记比正式报告晚了三天。”</p>
+      <p class="dialogue"><b>林澈：</b>“至少能对上前面的时间。”</p>
+      <p class="dialogue"><b>沈禾：</b>“能和前面的时间接上，再记。”</p>
+      <p>林澈把正式报告放到最左边，又把两张补记推到右边；他想说“可报告就是没写”，话到一半停了；沈禾已经在收旁边的塑料夹。</p>
+      <p class="dialogue"><b>林澈：</b>“如果当时不补这几张，后面就只剩那一句了。”</p>
+      <p class="dialogue"><b>沈禾：</b>“嗯。”</p>
+      <p class="dialogue"><b>林澈：</b>“你不觉得这很要命？”</p>
+      <p class="dialogue"><b>沈禾：</b>“我觉得。所以别替这几张纸多说。”</p>
+      <p>周野看了眼门外的雨，没有接话。他把手机亮给两个人看：物业刚问他们还要多久。</p>
+      <p>牛皮袋封底还有一张装订流转条：事故报告第二天上午开始汇总，第三天下午打印，手写补记并没有全部并入正文；纸上没有“删去”或者“隐瞒”一类字眼，只有“正文已定，补页归档”。</p>
+      <p class="dialogue"><b>林澈：</b>“这就解释了为什么补记更晚。”</p>
+      <p class="dialogue"><b>沈禾：</b>“时间对上了。为什么没并进正文……这张流转条没写。”</p>
+      <p class="dialogue"><b>周野：</b>“你们俩今晚比档案柜还难撬。”</p>
+      <p class="dialogue"><b>沈禾：</b>“挺好用的。”</p>
+      <div class="entry-links">
+        <button data-record="official_report">正式事故报告</button>
+        <button data-record="supp_pan">潘琴补记</button>
+        <button data-record="supp_zou">邹梅补记</button>
+        <button data-record="supp_he">何芹末页补写</button>
+        <button data-record="gym_receive">《临时体育馆接收页》</button>
+        <button data-record="teacher_margin">潘琴页边短记</button>
+        <button data-record="report_flow">《事故材料装订流转条》</button>
+      </div>
+      <div id="puzzle-p6" class="puzzle-slot"></div>
+    </section>
+
+    <section id="loc-rebuild" class="story-section gated" data-location="rebuild" hidden>
+      <div class="section-kicker">21:11</div>
+      <h2>把那一晚排回来</h2>
+      <p>物业发来一条消息：外门二十分钟后锁；周野把空箱子折起来，沈禾已经把能移交的纸装好；林澈没有再翻下一只袋子。</p>
+      <p class="dialogue"><b>沈禾：</b>“到这儿够了。后面如果还有，也不一定更真。”</p>
+      <p class="dialogue"><b>林澈：</b>“我知道。”</p>
+      <p class="dialogue"><b>周野：</b>“你这个‘我知道’一般代表你还想再看五分钟。”</p>
+      <p>桌上现在只剩已经读过的材料。没有新东西。林澈把便签重新按四个阶段分开。</p>
+      <p>沈禾把乔乔那张领鞋带的条子从主线材料里抽出去。</p>
+      <p class="dialogue"><b>林澈：</b>“那个也有日期。”</p>
+      <p class="dialogue"><b>沈禾：</b>“这张只是领鞋带，放生活杂项。”</p>
+      <p class="dialogue"><b>周野：</b>“可算有人治你了。”</p>
+      <p>林澈没争，把纸放回“生活杂项”。桌面空出一块，剩下的材料反而更容易看清。</p>
+      <p>他把“红线”“剪刀”“两名儿童留下”“后门钥匙”分别写在四张小纸上，周野看了一眼：“你要是把它们单独发网上，明天又能多出一版鬼故事。”</p>
+      <p class="dialogue"><b>林澈：</b>“所以不单独发。”</p>
+      <p>沈禾把四张纸翻到背面，写上各自对应的工作问题：湿衣、身份、错配、通行。她写完把笔递回去。</p>
+      <p class="dialogue"><b>沈禾：</b>“先把每一步为什么做接上，再看整晚顺不顺。”</p>
+      <div id="puzzle-p7" class="puzzle-slot"></div>
+      <div id="puzzle-p8" class="puzzle-slot"></div>
+    </section>
+
+    <section id="loc-rainnight" class="story-section gated finale" data-location="rainnight" hidden>
+      <div class="section-kicker">十九年前 · 18:12—19:54</div>
+      <h2>那一晚</h2>
+      <figure class="scene-frame">
+        <img src="assets/generated/activity_detail.jpg" alt="活动室临时摆着折叠床与几张旧椅，地面仍有雨夜留下的潮痕。" loading="lazy">
+      </figure>
+      <p>雨先从一层门缝进来；何芹带低龄组往楼上走，潘琴站在楼梯口数人；数到第三遍，小满还在往回看自己的鞋。</p>
+      <p class="dialogue"><b>潘琴：</b>“鞋先别管——上去！”</p>
+      <p class="dialogue"><b>小满：</b>“那双不是我的。”</p>
+      <p class="dialogue"><b>潘琴：</b>“我知道。上去再找。”</p>
+
+      <figure class="scene-frame narrow"><img src="assets/generated/wardrobe_room.jpg" alt="旧服装间靠窗堆着换下来的湿衣，工作台边留下分拣过的痕迹。" loading="lazy"></figure>
+      <p>库存衣从三楼储物间搬下来；湿衣一袋袋收走以后，原来缝在衣服里的姓名布签跟着衣服一起离开了人；邹梅拿着剪刀蹲在编织袋旁边，把还能看清的布签剪下来。</p>
+      <p class="dialogue"><b>邹梅：</b>“别把衣服混了。”</p>
+      <p class="dialogue"><b>周围有人：</b>“都湿成这样了，早混了。”</p>
+      <p>邹梅没回话，把剪下来的布签放进搪瓷盘。盘底有水；她刚擦过一遍，很快又积了一层。</p>
+      <p class="dialogue"><b>阿成：</b>“我的裤子呢？”</p>
+      <p class="dialogue"><b>邹梅：</b>“哪条是你的？”</p>
+      <p class="dialogue"><b>阿成：</b>“膝盖破的。”</p>
+      <p class="dialogue"><b>邹梅：</b>“那条已经湿透了，今天先穿别人的新裤子——别皱眉，明天再换回来。”</p>
+      <p>阿成低头看了看陌生的裤脚，没再问。</p>
+
+      <figure class="scene-frame narrow portrait"><img src="assets/generated/wrist_clean.jpg" alt="粗棉布腕带缝在手腕上，线结贴着袖口。" loading="lazy"></figure>
+      <p>潘琴把布签分给几个人。小满把手藏到背后。</p>
+      <p class="dialogue"><b>潘琴：</b>“手。”</p>
+      <p class="dialogue"><b>小满：</b>“不要。”</p>
+      <p class="dialogue"><b>潘琴：</b>“我知道。三分钟。”</p>
+      <p class="dialogue"><b>邹梅：</b>“你别跟她说三分钟，你一会儿又找线。”</p>
+      <p class="dialogue"><b>潘琴：</b>“线在你手上。”</p>
+      <p>邹梅低头看了看，没再说话。</p>
+
+      <p>18:56，乔乔站在换衣桌边，盯了两条腕带一会儿。</p>
+      <p class="dialogue"><b>乔乔：</b>“你写错了。”</p>
+      <p class="dialogue"><b>潘琴：</b>“哪儿？”</p>
+      <p>乔乔把小满的手腕抬高，又指了指豆豆。潘琴先皱眉，翻过另一条布带。她没有立刻说话。</p>
+      <p class="dialogue"><b>潘琴：</b>“你俩先坐这儿。别走。”</p>
+      <p class="dialogue"><b>豆豆：</b>“我要回去拿熊。”</p>
+      <p class="dialogue"><b>何芹：</b>“熊湿了。”</p>
+      <p class="dialogue"><b>豆豆：</b>“晾一下。”</p>
+      <p class="dialogue"><b>何芹：</b>“等雨停。”</p>
+      <p class="dialogue"><b>豆豆：</b>“你每次都说等雨停。”</p>
+
+      <p>潘琴翻了床位临调，又让何芹把照护页拿来；豆豆只认小名，别人突然叫“陈雨宁”，她不抬头；小满倒是把自己的名字说得很快，接着又去扯腕带。</p>
+      <p class="dialogue"><b>潘琴：</b>“别拆。”</p>
+      <p class="dialogue"><b>小满：</b>“勒。”</p>
+      <p class="dialogue"><b>潘琴：</b>“松一点。邹姐，剪一下。”</p>
+      <p>两条腕带重新缝过。潘琴在交接纸上写了“已核”，又把豆豆的登记名旁边补上括号：豆豆。</p>
+      <p class="dialogue"><b>豆豆：</b>“为什么要写两个？”</p>
+      <p class="dialogue"><b>潘琴：</b>“免得有人叫你半天，你又不理。”</p>
+      <p class="dialogue"><b>豆豆：</b>“我听见了。”</p>
+      <p class="dialogue"><b>潘琴：</b>“听见也不理？”</p>
+      <p>豆豆把脸转到一边。何芹忍了一下，还是笑了。</p>
+      <p>乔乔没走。她坐在桌角看潘琴写，等人把笔抬起来才说：</p>
+      <p class="dialogue"><b>乔乔：</b>“刚才是你拿错的。”</p>
+      <p class="dialogue"><b>潘琴：</b>“是。”</p>
+      <p class="dialogue"><b>乔乔：</b>“那你写了吗？”</p>
+      <p>潘琴把交接纸转了半圈，在“重新核对”后面又添了几个字。乔乔这才走。</p>
+
+      <figure class="scene-frame narrow wide-strip"><img src="assets/generated/stairs_clean.jpg" alt="昏暗楼梯间里，楼上有人影停住，通道被迫中断。" loading="lazy"></figure>
+      <p>19:16，南楼梯下面传来一声闷响。何芹站住了。乔乔拽了她一下。</p>
+      <p class="dialogue"><b>乔乔：</b>“何老师。”</p>
+      <p>何芹回过神，把最前面的两个孩子往回带。门厅积水已经漫过台阶，他们没有再下去。</p>
+      <p>后门钥匙从洗衣房取出来。队伍穿过晾衣杆之间的窄道，往后勤坡道走。</p>
+      <p>最前面的人先把送衣推车推到雨棚外，空出墙边一条路；孩子们一人扶一下墙，鞋底沾满洗衣房地砖上的水。</p>
+      <p class="dialogue"><b>何芹：</b>“别跑！前面停，后面就停。”</p>
+      <p class="dialogue"><b>乔乔：</b>“阿成鞋带开了。”</p>
+      <p class="dialogue"><b>阿成：</b>“不是鞋带，是鞋跟。”</p>
+      <p class="dialogue"><b>乔乔：</b>“反正你走慢点。”</p>
+
+      <figure class="scene-frame"><img src="assets/generated/rainnight_new.jpg" alt="雨夜里，大人带着孩子沿后勤出口排队撤离，地面反着湿光。" loading="lazy"></figure>
+      <p>阿成抱着一袋干毛巾，走了十几步就说重；邹梅没接，只让他拖着袋底；小满走到门口又开始扯腕带。</p>
+      <p class="dialogue"><b>邹梅：</b>“你再拆，等会儿我还得缝。”</p>
+      <p class="dialogue"><b>小满：</b>“丑。”</p>
+      <p class="dialogue"><b>邹梅：</b>“等干了再丑。”</p>
+
+      <figure class="scene-frame"><img src="assets/generated/gym_new.jpg" alt="临时安置点里，大人与孩子重新集合核对，衣服仍带着雨水。" loading="lazy"></figure>
+      <p>体育馆的地板被踩得都是湿印。乔乔靠墙坐着，一边鞋带松了。潘琴拿着改正后的接收页走过来。</p>
+      <p class="dialogue"><b>潘琴：</b>“再说一遍。”</p>
+      <p class="dialogue"><b>乔乔：</b>“我刚说过。”</p>
+      <p class="dialogue"><b>潘琴：</b>“我知道。”</p>
+      <p class="dialogue"><b>乔乔：</b>“乔乔。”</p>
+      <p>潘琴低头写。笔尖在湿纸上洇开一点。</p>
+      <p class="dialogue"><b>乔乔：</b>“你笔不是一直夹耳朵上吗？”</p>
+      <p>潘琴摸了一下右耳，没摸到。笔就在手里。</p>
+      <div class="ending-actions"><button id="leaveBtn" class="primary">收好材料，离开旧址</button></div>
+    </section>
+
+    <section id="loc-exit" class="story-section gated finale" data-location="exit" hidden>
+      <div class="section-kicker">21:17</div>
+      <h2>离开</h2>
+      <figure class="scene-frame"><img src="assets/generated/exit_new.jpg" alt="雨势变小后，三个人从旧址外的湿路离开。" loading="lazy"></figure>
+      <p>他们把最后一只箱子推回门厅；周野把折好的塑料布塞进后备箱，沈禾核对移交清单；林澈在门口站了一会儿，把钥匙装进封口袋。</p>
+      <p class="dialogue"><b>周野：</b>“你稿子怎么写？”</p>
+      <p class="dialogue"><b>林澈：</b>“先写能确认的。”</p>
+      <p class="dialogue"><b>周野：</b>“这句挺像沈老师。”</p>
+      <p class="dialogue"><b>沈禾：</b>“别赖我。”</p>
+      <p>他们关掉手电，沿来时的坡道出去。</p>
+      <p>外面雨已经小了；周野把后备箱关上，又打开一次，确认学校那箱没压到待确认材料；林澈站在屋檐下把手里的便签撕成两半——写错的那半扔进垃圾袋，剩下那半夹回登记本。</p>
+      <p class="dialogue"><b>周野：</b>“饭还欠着。”</p>
+      <p class="dialogue"><b>林澈：</b>“记得。”</p>
+      <p class="dialogue"><b>周野：</b>“最好你也写张记录。”</p>
+      <p>林澈准备把登记夹塞进 C 箱，纸边却挂住了塑料扣；他低头重新理齐，最上面那张《清点登记说明》多了一行蓝黑色的字。</p>
+      <p class="anomaly-line">21:17　后门已锁，三人离场。</p>
+      <p class="dialogue"><b>林澈：</b>“这行谁写的？”</p>
+      <p class="dialogue"><b>周野：</b>“什么？”</p>
+      <p>周野接过去看了两秒，先摸自己的口袋，又把两只手都摊开。</p>
+      <p class="dialogue"><b>周野：</b>“我没碰你那支笔……沈禾？”</p>
+      <p class="dialogue"><b>沈禾：</b>“我一直在核箱号。”</p>
+      <p>手机屏幕亮了一下：21:17。</p>
+      <p>没人再说话。林澈把那页纸夹回最上面，扣好登记夹，关上 C 箱。</p>
+      <figure class="scene-frame narrow wide-strip"><img src="assets/generated/corridor_clean.jpg" alt="旧楼深处的走廊只剩雨后的反光，远处没有人走动。" loading="lazy"></figure>
+      <div class="ending-actions">
+        <p>清点记录已保存。</p>
+        <button id="reviewBtn" class="secondary">回看已经整理过的位置</button>
+        <button id="restartBtn" class="ghost">重新开始</button>
+      </div>
+    </section>
+  </main>
+
+  <aside id="rightRecords" class="right-records" aria-label="手里的记录">
+    <div class="nav-head"><span>手里的记录</span><button class="drawer-close mobile-only" data-close-drawer="rightRecords" aria-label="关闭记录抽屉">×</button></div>
+    <div id="recordList" class="record-list"></div>
+  </aside>
+
+  <div class="mobile-dock mobile-only" role="navigation" aria-label="游戏快捷入口">
+    <button data-open-drawer="leftNav">看过的位置</button>
+    <button data-open-drawer="rightRecords">手里的记录</button>
+  </div>
+
+  <button id="returnBtn" class="return-btn" hidden>回到刚才位置</button>
+</div>
+
+<dialog id="recordDialog" class="record-dialog">
+  <article>
+    <button class="dialog-close" aria-label="关闭记录">×</button>
+    <p id="recordMeta" class="record-meta"></p>
+    <h2 id="recordTitle"></h2>
+    <div id="recordBody" class="record-body"></div>
+  </article>
+</dialog>
+
+<dialog id="settingsDialog" class="settings-dialog">
+  <article>
+    <button class="dialog-close" aria-label="关闭设置">×</button>
+    <h2>设置</h2>
+    <label>文字大小
+      <select id="fontScaleGame"><option value="1">标准</option><option value="1.12">较大</option><option value="1.25">大</option></select>
+    </label>
+    <label class="check"><input id="reduceMotionGame" type="checkbox"> 减少动态</label>
+    <hr>
+    <p class="small">本作无背景音乐；所有关键事实都以可阅读文字提供，不要求从画面或声音中识别答案。</p>
+    <button id="resetBtn" class="danger">清除存档并回到标题</button>
+  </article>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="game.js"></script>
+</body>
+</html>
