@@ -1,10 +1,10 @@
 (() => {
 'use strict';
 
-const SAVE_KEY = 'huaiwan_orphanage_save_v4';
-const LEGACY_SAVE_KEYS = ['huaiwan_orphanage_save_v3','huaiwan_orphanage_save_v2'];
-const SETTINGS_KEY = 'huaiwan_orphanage_settings_v4';
-const LEGACY_SETTINGS_KEYS = ['huaiwan_orphanage_settings_v3','huaiwan_orphanage_settings_v2'];
+const SAVE_KEY = 'huaiwan_orphanage_save_v6';
+const LEGACY_SAVE_KEYS = ['huaiwan_orphanage_save_v5','huaiwan_orphanage_save_v4','huaiwan_orphanage_save_v3','huaiwan_orphanage_save_v2'];
+const SETTINGS_KEY = 'huaiwan_orphanage_settings_v6';
+const LEGACY_SETTINGS_KEYS = ['huaiwan_orphanage_settings_v5','huaiwan_orphanage_settings_v4','huaiwan_orphanage_settings_v3','huaiwan_orphanage_settings_v2'];
 
 const locations = [
   ['lobby','门厅'],['activity','活动室'],['wardrobe','服装室'],['dorm','二层寝室'],['records','记录柜'],['office','值班室'],
@@ -52,26 +52,29 @@ const records = {
   entry_rules:{title:'清点登记说明',meta:'现代 / 拆除前移交',body:[
     '能辨认的纸质材料登记标题、日期、来源位置；不做现场修复',
     '可移交学校的普通教育史旧物单独装箱；建筑拆除相关材料留给拆除队；无法确认去向的暂存',
-    '每离开一处，补写清点时间与经手人；未签经手人的行不计入正式移交记录'
+    '每离开一处，补写清点时间与经手人；未签经手人的行不计入正式移交记录','破损严重但仍能辨读的材料，不现场拆订；装袋后在箱单备注“原状保存”'
   ]},
   box_labels:{title:'三只纸箱标签',meta:'现代 / 门厅',lines:['A箱：学校接收——普通教学与儿童生活旧物','B箱：拆除队——建筑、钥匙、维修、施工相关','C箱：待确认——来源或去向不明']},
+  canteen_scrap:{title:'《晚饭临时分配条》',meta:'十九年前 / 活动室柜内 / 与主线无关',lines:['17:20　低龄组米饭 12 份，另留白粥 2 份','小满不要香菜；豆豆只肯用黄色杯','缺小勺 1 把，晚些从二层取','背面有人算了两道乘法，第二道写错后涂掉']},
+  shoe_box_note:{title:'《鞋柜小纸条》',meta:'十九年前 / 二层寝室 / 生活杂项',lines:['乔乔：鞋带一对，右边那根总松','阿成：左鞋后跟又开线，暂贴胶布','小满：拖鞋穿反一次，被何芹换回','纸角画了一只很不像猫的猫']},
+  phone_repair_slip:{title:'《值班室电话报修条》',meta:'十九年前 / 两周前 / 与事故无直接关系',lines:['故障：听筒杂音，偶尔断线','维修：更换卷线；机身继续使用','签收栏只写了一个“潘”字','背面夹着一张糖纸，已经褪成灰色']},
   temp_bed_partial:{title:'《临时床位调整》受潮页',meta:'十九年前 / 18:30 后',lines:['低龄组暂移活动室，折叠床另记','……04 床……停……','……靠门……观察……']},
   activity_misc:{title:'活动室柜内杂物',meta:'现代 / 无关主线',lines:['一盒彩色粉笔，只剩白色和绿色','两张旧贴纸背面写着“借蜡笔要还”','一只没有盖子的塑料水杯，底部刻着“成”']},
-  stock_form:{title:'《库存衣物领用单》',meta:'十九年前 / 18:34',lines:['18:34　领库存短袖 18 件、长裤 16 条、薄外套 7 件','领用原因：一层进水，低龄组与活动室临时安置儿童换干衣','经手：邹梅']},
-  wet_clothes:{title:'《湿衣收拢表》',meta:'十九年前 / 18:37',lines:['18:37 起，湿衣按楼层暂装编织袋','部分衣物姓名布签仍可辨','备注：先送洗衣房，不得继续穿']},
-  cutting_note:{title:'《后勤剪裁条》',meta:'十九年前 / 18:41',lines:['剪可辨姓名布签，另存','布签先放搪瓷盘，后缝棉布条','剪刀归还洗衣房针线柜']},
-  flood_note:{title:'《一层进水简记》',meta:'十九年前 / 18:12—18:27',lines:['18:12　旧河道水位涨','18:21　门厅外沿进水','18:27　低龄组先移二层']},
-  bed_repair:{title:'《床架维修单》',meta:'十九年前 / 当日上午',lines:['二层 04 床：床板裂，停用','临时移开床垫，待下周更换','值班人员已知']},
+  stock_form:{title:'《库存衣物领用单》',meta:'十九年前 / 18:34',lines:['18:34　领库存短袖 18 件、长裤 16 条、薄外套 7 件','领用原因：一层进水，低龄组与活动室临时安置儿童换干衣','毛巾 12 条一并领走；拖鞋数量不足，沿用各组原有库存','经手：邹梅','页脚另记：130 码长裤少 2 条，次日补库']},
+  wet_clothes:{title:'《湿衣收拢表》',meta:'十九年前 / 18:37',lines:['18:37 起，湿衣按楼层暂装编织袋','二层袋口扎蓝绳；活动室袋口未扎，后补标记','部分衣物姓名布签仍可辨，裤脚与袖口普遍进水','备注：先送洗衣房，不得继续穿','一只黄色塑料杯误装进袋，已取出放值班桌']},
+  cutting_note:{title:'《后勤剪裁条》',meta:'十九年前 / 18:41',lines:['18:41　开始剪取仍可辨认的姓名布签，另存','字迹已经散开的不强认，单独压在盘边','布签先放搪瓷盘，后缝棉布条；盘底积水要勤擦','剪刀归还洗衣房针线柜','经手栏写得很重：邹梅']},
+  flood_note:{title:'《一层进水简记》',meta:'十九年前 / 18:12—18:27',lines:['18:12　旧河道水位涨，院墙排水口回流','18:18　门厅铺毛巾、抬低处纸箱','18:21　外沿进水，靠门区域不再堆物','18:27　低龄组先移二层','旁注：雨势继续加大，电话联系街道未接通一次']},
+  bed_repair:{title:'《床架维修单》',meta:'十九年前 / 当日上午',lines:['二层 04 床：床板裂，停用','床垫已移至储物角，不得临时铺回','维修材料预计下周到；先用活动室折叠床顶替','值班人员已知，交班时再提醒一次','维修人签名只剩姓：赵']},
   night_care:{title:'《夜间照护页》',meta:'十九年前 / 事故当日',lines:['林小满：原二层，因 04 床停用，晚间改活动室折叠床','乔乔：二层原寝室','阿成：二层原寝室','豆豆：新入院，当晚安排活动室靠门观察位；登记名陈雨宁']},
   daily_issue:{title:'《当日物品领用条》',meta:'十九年前 / 下午',lines:['小满：薄毯 1','乔乔：鞋带 1 对','阿成：毛巾袋 1','豆豆：临时洗漱杯 1，备注“只认小名”']},
   temp_bed_full:{title:'《临时床位调整》完整页',meta:'十九年前 / 17:50',lines:['活动室折叠床 1：林小满','活动室靠门观察位：陈雨宁（豆豆）','二层原寝室：乔乔、阿成等','04 床：维修停用']},
   handover_pan:{title:'潘琴交接',meta:'十九年前 / 当晚手写',lines:['低龄上楼后换干衣','腕带先按原布签做','18:56 两名儿童暂留换衣桌，重新核对','南楼梯停用后改后勤口']},
   handover_zou:{title:'邹梅交接',meta:'十九年前 / 当晚手写',lines:['湿衣收拢后剪可辨布签','布签放盘，盘底有水，字更花','有两块发反，已拆线重缝','后门钥匙 19:18 取']},
   handover_he:{title:'何芹值班末页',meta:'十九年前 / 当晚手写',lines:['低龄组先移二层','换衣后在活动室等','乔乔说腕带名字不对','19:16 南楼梯裂响，人员回撤']},
-  wristband_a:{title:'临时腕带抄记 A',meta:'十九年前 / 18:49',lines:['姓名：林小满','临时地点：二层','缝制时间：18:49']},
-  wristband_b:{title:'临时腕带抄记 B',meta:'十九年前 / 18:49',lines:['姓名：陈雨宁','临时地点：活动室','缝制时间：18:49']},
+  wristband_a:{title:'临时腕带抄记 A',meta:'十九年前 / 18:49',lines:['姓名：林小满','临时地点：二层','缝制时间：18:49','材料：白棉布，红粗线','抄记人末笔过重，地点栏有一处擦痕']},
+  wristband_b:{title:'临时腕带抄记 B',meta:'十九年前 / 18:49',lines:['姓名：陈雨宁','临时地点：活动室','缝制时间：18:49','材料：白棉布，红粗线','姓名后另添小字“豆豆”，墨色较浅']},
   doudou_name:{title:'新入院生活说明',meta:'十九年前 / 豆豆',lines:['登记名：陈雨宁','目前只稳定回应“小名：豆豆”','突然叫登记全名时常无反应，交接须说明']},
-  stairs_closed:{title:'《南楼梯维修页》',meta:'十九年前 / 19:16',lines:['19:16　半层墙体裂缝扩大','南楼梯停止通行','不得从二层继续向门厅下撤']},
+  stairs_closed:{title:'《南楼梯维修页》',meta:'十九年前 / 19:16',lines:['19:16　半层墙体裂缝扩大，扶手一侧掉灰','南楼梯立即停止通行；二层人员原路回撤','不得从二层继续向门厅下撤','楼梯口临时放木凳作拦挡，后续改用绳','页角沾泥，最后一行只写到“别推车”']},
   lobby_water:{title:'《门厅水位简记》',meta:'十九年前 / 19:12',lines:['19:02　门厅积水过鞋底','19:12　外门内侧持续进水','推车已无法从正门通过']},
   back_key:{title:'《后门钥匙登记》',meta:'十九年前 / 19:18',lines:['19:18　洗衣房后门钥匙借出','借用：邹梅','19:52　未归；次日补记已交物业']},
   slope_access:{title:'《后勤坡道通行说明》',meta:'旧日常文件',lines:['洗衣房后门外接后勤坡道','坡道宽度可过送衣推车','雨天注意防滑；不得堆放纸箱']},
@@ -101,7 +104,7 @@ const records = {
     '我补写：腕带两条发反，已重缝',
     '这行后来没有抄进正式报告'
   ]},
-  official_report:{title:'正式事故报告',meta:'事故后 / 打印件',lines:['强降雨造成一层进水及南侧楼梯结构隐患','儿童与工作人员经后勤通道安全转移','转移前完成二次核对，登记无误','无人员失踪及伤亡']},
+  official_report:{title:'正式事故报告',meta:'事故后 / 打印件',lines:['事由：持续强降雨造成一层进水及南侧楼梯结构隐患','处置：低龄组先行调整位置，工作人员按值班分工转移物资与人员','转移：儿童与工作人员经后勤通道离开旧楼，送往临时体育馆','核对：转移前完成二次核对，登记无误','结果：无人员失踪及伤亡；旧楼后续封闭','打印页脚：第三日下午定稿，附页另存']},
   supp_pan:{title:'潘琴补记',meta:'事故后第 3 日 / 手写',lines:['18:56 前后，两条临时腕带曾发反','乔乔先提出，小满与豆豆留在桌边重核','我当时先以为孩子拿错，后确认是发带时认错']},
   supp_zou:{title:'邹梅补记',meta:'事故后第 4 日 / 手写',lines:['湿布签都放一个搪瓷盘，盘底有水','两块字花得厉害，我没有分开压','潘琴拿时认错两块，拆线后重缝']},
   supp_he:{title:'何芹末页补写',meta:'事故后一周 / 原值班本',lines:['南楼梯裂响时我停了一下，乔乔叫我','孩子从活动室穿洗衣房去后门','体育馆又核一次，名单齐']},
@@ -118,17 +121,17 @@ const records = {
   rework_note:{title:'《腕带返工便条》',meta:'十九年前 / 18:58 后',lines:['两条腕带拆线重缝','旧线不要再用，防止松脱','旁注只有一个“乔”字，不能确认是姓名还是经手简称']},
   needle_box:{title:'针线柜清点页',meta:'十九年前 / 后勤',lines:['粗红棉线 2 卷半；白线 4 卷；黑线 1 卷','大号针 7 枚，小号针 11 枚','剪刀 2 把，事故次日清点均在','无特殊器械']},
   cart_note:{title:'《送衣推车移位条》',meta:'十九年前 / 19:22',lines:['19:22　送衣推车先推至坡道雨棚外','目的：空出洗衣房后门内侧通道','备注：地面太滑，儿童靠墙走']},
-  report_flow:{title:'《事故材料装订流转条》',meta:'事故后 / 行政归档',lines:['次日上午：收集值班本、后勤页、门钥匙登记','第 3 日上午：形成事故报告正文','第 3 日下午：正文打印、签字','其后补记：单独归档；正文已定，不再重排']}
+  report_flow:{title:'《事故材料装订流转条》',meta:'事故后 / 行政归档',lines:['次日上午：收集值班本、后勤页、门钥匙登记；缺一张洗衣房便条','第 2 日下午：补收体育馆接收页，编号附后','第 3 日上午：形成事故报告正文','第 3 日下午：正文打印、签字，装订一式两份','其后补记：单独归档；正文已定，不再重排','流转末格空白，没有再写经手人']}
 };
 
 const defaultState = () => ({
-  version:4,started:false,
+  version:6,started:false,
   unlocked:{lobby:true,activity:false,wardrobe:false,dorm:false,records:false,office:false,laundry:false,stairs:false,supplement:false,rebuild:false,rainnight:false,exit:false},
   unreadLocations:{lobby:false,activity:false,wardrobe:false,dorm:false,records:false,office:false,laundry:false,stairs:false,supplement:false,rebuild:false,rainnight:false,exit:false},
   visitedLocations:['lobby'],
   records:[], puzzles:{}, attempts:{}, hints:{}, puzzleSeenAt:{}, formDrafts:{}, drafts:{},
   anchors:Object.fromEntries(Object.keys(anchorConfig).map(k=>[k,{state:0,unread:false}])),
-  currentLocation:'lobby', returnLocation:null,
+  currentLocation:'lobby', returnLocation:null, scrollPositions:{},
   settings:{fontScale:1,reduceMotion:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches||false},
   startedAt:Date.now(), lastSavedAt:0
 });
@@ -151,7 +154,7 @@ function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify(state.s
 function save(){state.lastSavedAt=Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(state));updateContinue();}
 function normalizeLoadedState(saved){
   const fresh=defaultState();
-  const merged={...fresh,...saved,version:4};
+  const merged={...fresh,...saved,version:6};
   merged.unlocked={...fresh.unlocked,...(saved.unlocked||{})};
   merged.unreadLocations={...fresh.unreadLocations,...(saved.unreadLocations||{})};
   merged.anchors={...fresh.anchors,...(saved.anchors||{})};
@@ -159,12 +162,13 @@ function normalizeLoadedState(saved){
   merged.visitedLocations=Array.isArray(saved.visitedLocations)?saved.visitedLocations:['lobby',saved.currentLocation].filter(Boolean);
   merged.formDrafts=saved.formDrafts||{};
   merged.drafts=saved.drafts||{};
+  merged.scrollPositions={...fresh.scrollPositions,...(saved.scrollPositions||{})};
   return merged;
 }
 function loadSave(){
   try{
     const raw=localStorage.getItem(SAVE_KEY)||LEGACY_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean); if(!raw) return false;
-    const saved=JSON.parse(raw); if(!saved||![2,3,4].includes(saved.version)) return false;
+    const saved=JSON.parse(raw); if(!saved||![2,3,4,5,6].includes(saved.version)) return false;
     state=normalizeLoadedState(saved); loadSettings(); save(); return true;
   }catch{return false;}
 }
@@ -191,13 +195,16 @@ function startGame(fromSave=false){
     const settings={fontScale:Number($('#fontScaleStart').value),reduceMotion:$('#reduceMotionStart').checked};
     state=defaultState();state.settings=settings;state.started=true;state.startedAt=Date.now();saveSettings();save();
   } else {state.started=true;}
+  document.body.classList.add('game-running');
   $('#startScreen').hidden=true;$('#gameShell').hidden=false;applySettings();refreshAll();
   requestAnimationFrame(()=>{
-    const target=document.getElementById('loc-'+(state.currentLocation||'lobby'))||$('#loc-lobby');
-    target.scrollIntoView({block:'start',behavior:'auto'});$('#mainGame').focus({preventScroll:true});
+    restoreSceneScroll(true);
+    $('#mainGame').focus({preventScroll:true});
   });
 }
 function backToTitle(){
+  rememberSceneScroll();
+  document.body.classList.remove('game-running');
   $('#gameShell').hidden=true;$('#startScreen').hidden=false;updateContinue();window.scrollTo(0,0);
 }
 
@@ -214,13 +221,32 @@ function discoverRecord(id){
   if(!state.records.includes(id)){state.records.push(id);save();renderRecordList();renderPuzzles();updateQuestion();}
   openRecord(id);
 }
+function recordKind(id,r){
+  if(['entry_rules','box_labels','desk_log'].includes(id)) return 'modern';
+  if(['official_report','report_flow'].includes(id)) return 'official';
+  if(['stock_form','wet_clothes','daily_issue','donation_sizes','needle_box','gym_receive'].includes(id)) return 'inventory';
+  if(['bed_repair','stairs_closed','phone_repair_slip','back_key','slope_access'].includes(id)) return 'repair';
+  if(id.startsWith('supp_')||id.startsWith('handover_')||['teacher_margin','night_misc','borrow_book','back_halfline','shift_strip'].includes(id)) return 'handover';
+  if(['activity_misc','activity_roll','canteen_scrap','shoe_box_note'].includes(id)) return 'child';
+  if(['cutting_note','rework_note','cart_note','group_note'].includes(id)) return 'label';
+  return 'form';
+}
 function openRecord(id){
   const r=records[id];if(!r)return;
   lastDialogFocus=document.activeElement;
+  const paper=$('#recordSheet'); if(paper) paper.dataset.kind=recordKind(id,r);
   $('#recordMeta').textContent=r.meta||'';$('#recordTitle').textContent=r.title;
   const body=$('#recordBody');body.innerHTML='';
-  (r.body||[]).forEach(p=>{const el=document.createElement('p');el.textContent=p;body.appendChild(el);});
-  (r.lines||[]).forEach(line=>{const el=document.createElement('div');el.className='line';el.textContent=line;body.appendChild(el);});
+  (r.body||[]).forEach(text=>{const el=document.createElement('p');el.textContent=text;body.appendChild(el);});
+  (r.lines||[]).forEach(line=>{
+    const el=document.createElement('div');el.className='line';
+    const tm=String(line).match(/^(\d{1,2}:\d{2}(?:[—-]\d{1,2}:\d{2})?)\s*[　 ]*(.*)$/);
+    const fm=!tm&&String(line).match(/^([^：]{1,12})：\s*(.*)$/);
+    if(tm){const t=document.createElement('span');t.className='record-time';t.textContent=tm[1];const v=document.createElement('span');v.className='record-value';v.textContent=tm[2];el.append(t,v);}
+    else if(fm){const l=document.createElement('span');l.className='record-label';l.textContent=fm[1];const v=document.createElement('span');v.className='record-value';v.textContent=fm[2];el.append(l,v);}
+    else el.textContent=line;
+    body.appendChild(el);
+  });
   $('#recordDialog').showModal();$('.dialog-close',$('#recordDialog')).focus();
 }
 function closeDialog(d){d.close(); if(lastDialogFocus?.focus) lastDialogFocus.focus();}
@@ -265,21 +291,62 @@ function renderNav(){
     nav.appendChild(group);
   });
 }
+function activeScene(){return document.querySelector('.story-section.active-scene');}
+function rememberSceneScroll(){
+  const scene=activeScene();
+  if(!scene||!state.currentLocation)return;
+  state.scrollPositions=state.scrollPositions||{};
+  state.scrollPositions[state.currentLocation]=scene.scrollTop;
+}
+function restoreSceneScroll(forceTop=false){
+  const scene=activeScene(); if(!scene)return;
+  const top=forceTop?0:Number(state.scrollPositions?.[state.currentLocation]||0);
+  scene.scrollTo({top,behavior:'auto'});
+}
+function scrollWithinScene(target,behavior='auto'){
+  const scene=target?.closest('.story-section')||activeScene(); if(!scene||!target)return;
+  const sceneRect=scene.getBoundingClientRect();
+  const targetRect=target.getBoundingClientRect();
+  const top=scene.scrollTop+(targetRect.top-sceneRect.top)-20;
+  scene.scrollTo({top:Math.max(0,top),behavior});
+}
 function jumpTo(targetId,isRevisit=false,anchorId=null){
-  const target=document.getElementById(targetId);if(!target)return;
+  const initial=document.getElementById(targetId);if(!initial)return;
   const current=state.currentLocation;
-  const locId=target.matches('.story-section')?target.dataset.location:target.closest('.story-section')?.dataset.location;
-  if(isRevisit && current && locId && locId!==current){state.returnLocation=current;$('#returnBtn').hidden=false;}
-  if(locId){markVisited(locId);state.currentLocation=locId;state.unreadLocations=state.unreadLocations||{};state.unreadLocations[locId]=false;$('#saveLabel').textContent=locations.find(x=>x[0]===locId)?.[1]||locId;save();renderNav();updateQuestion();}
-  if(locId&&state.unreadLocations?.[locId]){state.unreadLocations[locId]=false;save();renderNav();}
+  const locId=initial.matches('.story-section')?initial.dataset.location:initial.closest('.story-section')?.dataset.location;
+  if(!locId)return;
+  if(isRevisit && current && locId!==current){state.returnLocation=current;$('#returnBtn').hidden=false;}
+  if(current!==locId) rememberSceneScroll();
+  markVisited(locId);
+  state.currentLocation=locId;
+  state.unreadLocations=state.unreadLocations||{};
+  state.unreadLocations[locId]=false;
+  $('#saveLabel').textContent=locations.find(x=>x[0]===locId)?.[1]||locId;
   if(anchorId) clearAnchorUnread(anchorId);
-  const behavior=state.settings.reduceMotion?'auto':'smooth';
-  target.scrollIntoView({behavior,block:'start'});
-  setTimeout(()=>{const h=target.matches('section')?$('h2',target):$('h3',target);if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}},state.settings.reduceMotion?0:350);
+  save();
+  renderSections();renderNav();updateQuestion();
+  requestAnimationFrame(()=>{
+    const target=document.getElementById(targetId);
+    const behavior=state.settings.reduceMotion?'auto':'smooth';
+    if(targetId==='loc-'+locId) restoreSceneScroll(false);
+    else scrollWithinScene(target,behavior);
+    setTimeout(()=>{
+      const h=target?.matches('.story-section')?$('h2',target):$('h3',target);
+      if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}
+    },state.settings.reduceMotion?0:280);
+  });
   closeMobileDrawers();
 }
 function renderSections(){
-  $$('.story-section').forEach(sec=>{const id=sec.dataset.location;sec.hidden=!state.unlocked[id];});
+  let current=state.currentLocation;
+  if(!state.unlocked[current]) current=locations.find(([id])=>state.unlocked[id])?.[0]||'lobby';
+  state.currentLocation=current;
+  document.body.dataset.scene=current;
+  $$('.story-section').forEach(sec=>{
+    const id=sec.dataset.location;
+    sec.hidden=!state.unlocked[id]||id!==current;
+    sec.classList.toggle('active-scene',id===current);
+  });
   $('#returnBtn').hidden=!state.returnLocation;
 }
 function renderRecordList(){
@@ -302,19 +369,19 @@ function solvePuzzle(id,skipped=false){
   if(state.formDrafts) delete state.formDrafts[id];
   save();
   if(id==='p0'){
-    ['activity','wardrobe'].forEach(unlock);showToast('服装室和活动室可以继续清点。');
+    ['activity','wardrobe'].forEach(unlock);showToast('三只箱子重新分开了。');
   }
   if(id==='p1'){
-    setAnchorState('cloth_tags',1,true);unlock('dorm');showToast('先去二层寝室核床位。');
+    setAnchorState('cloth_tags',1,true);unlock('dorm');showToast('几张记录的时间先后已经对上。');
   }
   if(id==='p2'){
-    setAnchorState('temp_place',1,true);setAnchorState('empty_bed',1,true);unlock('records');showToast('记录柜已经有足够的前置线索。');
+    setAnchorState('temp_place',1,true);setAnchorState('empty_bed',1,true);unlock('records');showToast('床号与临时睡位已经分开。');
   }
   if(id==='p3'){
-    setAnchorState('papers',1,true);unlock('office');showToast('值班室里还有一组对照材料。');
+    setAnchorState('papers',1,true);unlock('office');showToast('三份交接能接到同一晚。');
   }
   if(id==='p3b'){
-    unlock('laundry');showToast('去洗衣房看腕带返工记录。');
+    unlock('laundry');showToast('腕带上的冲突落在临时位置。');
   }
   if(id==='p4'){
     setAnchorState('cloth_tags',2,true);setAnchorState('laundry_table',2,true);setAnchorState('two_children',1,true);setAnchorState('empty_bed',2,true);unlock('stairs');
@@ -326,22 +393,22 @@ function solvePuzzle(id,skipped=false){
   if(id==='p7'){/* P8 appears */}
   if(id==='p8'){
     setAnchorState('temp_place',2,false);unlock('rainnight');
-    showToast('桌上的材料已经排回同一晚。');
+    showToast('桌上的材料已经排成一整晚。');
   }
   refreshAll();
 }
 
 const puzzleMeta = {
-  p0:{submitLabel:'贴回箱签',hintLabel:'看一眼原标签',title:'把三张箱签放回去',question:'箱签刚才被挪到桌面上；按它们原本写的去向，放回对应纸箱。',requires:[],hints:['标签已经直接写明去向，不需要推理。','先看 A 箱：“学校接收”。','A→移交学校，B→拆除队，C→待确认。'],solved:'箱子分开了；接下来能逐间清点。'},
-  p1:{submitLabel:'按这个顺序记',hintLabel:'翻一条时间旁注',title:'他们为什么把名字从衣服上剪下来？',question:'先把四份记录按“换衣开始前 / 换衣开始后”分开，再看剪布签出现在什么位置。',requires:['flood_note','stock_form','wet_clothes','cutting_note'],hints:['先只看每张纸上的时间。','18:34 已经开始发库存衣；剪裁条是 18:41。','18:12—18:27 在前；18:34、18:37、18:41 都在换衣开始以后。'],solved:'换干衣已经开始，旧湿衣才被统一收走；布签是从离开本人的湿衣上剪下来的。'},
-  p2:{submitLabel:'把位置写回去',hintLabel:'再查一张床位记录',title:'床号和人对不上',question:'根据文字记录，把四名孩子放回事故当晚实际待过的位置；04 床当天已经停用，不能按床号直觉判断。',requires:['bed_repair','night_care','daily_issue','temp_bed_full','night_misc'],hints:['不要按床号猜，先处理“04 床停用”。','《晚间小事本》和临调页都写到小满已经睡活动室。','小满→活动室折叠床；豆豆→靠门观察位；乔乔/阿成→原寝室。'],solved:'04 床当天没人入住；小满和豆豆都在活动室，只是位置不同。'},
-  p3:{submitLabel:'合并这条时间线',hintLabel:'找一个前后关系',title:'三份交接写的是同一晚吗？',question:'只排“必须先发生”的关系；如果三份纸能排进同一条时间链，它们才可能在写同一次处理。',requires:['handover_pan','handover_zou','handover_he','shift_strip'],hints:['不需要精确到分钟；先抓“换衣、剪布签、缝腕带、发现错配”。','发现错配一定发生在腕带缝好以后；封南楼梯在纠正腕带以后。','上楼→换衣→剪布签→缝腕带→发现错配→封南楼梯。'],solved:'三份纸能排进同一条时间链；它们描述的处理没有互相排斥。'},
-  p3b:{submitLabel:'留下这两句',hintLabel:'核一次称呼',title:'错的是名字，还是地点？',question:'四句话里只有两句能和手里的记录同时成立；把那两句留下。',requires:['alias_board','group_note','wristband_a','wristband_b','temp_bed_full'],hints:['先确认“豆豆”是不是陈雨宁，再看腕带上的临时地点。','名字能对上；冲突出在“二层 / 活动室”这两个地点。','应选：两条腕带姓名都能对应本人；两条腕带的临时地点与临调页相反。'],solved:'名字没有换人；两条腕带写反的是临时地点。'},
-  p4:{submitLabel:'改回临时位置',hintLabel:'翻床位旁页',title:'被留下重新核对的是谁？',question:'两条腕带的姓名没错，临时地点却与其他记录冲突。结合床位、生活观察和小名说明，把地点改回去。',requires:['wristband_a','wristband_b','doudou_name','identity_observations','clothing_followup','temp_bed_full','rework_note'],hints:['把腕带上的地点和《临时床位调整》并排。','豆豆的登记名是陈雨宁。','林小满应写“活动室折叠床”；陈雨宁应写“靠门观察位”。'],solved:'留下重核的是小满和豆豆；两条腕带拆线后，临时地点被改回各自记录。'},
-  p5:{submitLabel:'圈出这条路',hintLabel:'再看一个出口条件',title:'19:16 以后还能往哪走？',question:'从活动室出发，排除已经停用或无法通过的方向，选出一条当时还能连续通行的路线。',requires:['stairs_closed','lobby_water','back_key','slope_access','passage_shift','cart_note'],hints:['先排除已经停用或积水过深的方向。','南楼梯不能走；正门也不适合推车。','活动室→洗衣房→后门坡道。'],solved:'南楼梯和正门都断了路；洗衣房后的坡道当时仍能通行。'},
-  p6:{submitLabel:'归回原页',hintLabel:'看一眼写作时间',title:'正式报告漏掉了哪一段？',question:'这些句子写在不同时间。按纸张本身的时间和用途，把它们放回“现场当时写 / 事后补写 / 正式报告”。',requires:['official_report','supp_pan','supp_zou','supp_he','gym_receive','teacher_margin','report_flow'],hints:['先看日期和纸张用途；内容像不像真话，不是这一题要分的。','带“补记”“事故后”的都不是现场当时写；打印件是正式报告。','两句现场来自原值班/交接；四句事后补写；最后两句来自正式报告。'],solved:'腕带错配留在现场纸和事后补记里；正式报告只留下“二次核对无误”。'},
-  p7:{submitLabel:'接好这六组关系',hintLabel:'翻一个直接原因',title:'这些动作当时在处理什么？',question:'把六个动作和它们当时要处理的麻烦接起来；只用已经读过的记录。',requires:[],hints:['优先从已经改过名的锚点开始。','“剪布签”不是原因本身，先问当时衣服去了哪里。','每个动作都能在一份记录中找到直接原因。'],solved:'动作和原因已经能逐项接上；剩下的是把整晚放回时间段。'},
-  p8:{submitLabel:'收起这张时间表',hintLabel:'再看一个阶段',title:'把那一晚排回来',question:'把十二件事放回“进水 / 换衣 / 核对 / 转移”四段；同一段里不要求再排分钟。',requires:[],hints:['先放最明确的：河道水位→进水；体育馆→转移。','“乔乔指出错配”“两孩暂留”“翻生活记录”都属于核对。','库存衣、湿衣、剪布签、缝腕带都属于换衣阶段。'],solved:'四段时间能完整接上；可以往下看那一晚的完整经过。'}
+  p0:{submitLabel:'贴回箱签',hintLabel:'看一眼原标签',title:'把三张箱签放回去',question:'箱签刚才被挪到桌面上；按它们原本写的去向，放回对应纸箱。',requires:[],hints:['标签已经直接写明去向，不需要推理。','先看 A 箱：“学校接收”。','A→移交学校，B→拆除队，C→待确认。'],solved:'箱签已经回到原来的三只箱子，门厅这一摞可以继续往下清。'},
+  p1:{submitLabel:'按这个顺序记',hintLabel:'翻一条时间旁注',title:'他们为什么把名字从衣服上剪下来？',question:'四份记录跨过换衣前后；把它们分开，看看剪裁条最后落在哪一边。',requires:['flood_note','stock_form','wet_clothes','cutting_note'],hints:['先只看每张纸上的时间。','18:34 已经开始发库存衣；剪裁条是 18:41。','18:12—18:27 在前；18:34、18:37、18:41 都在换衣开始以后。'],solved:'18:34先发干衣，18:41才见剪裁条；布签离开的是旧湿衣，不是孩子本人。'},
+  p2:{submitLabel:'把位置写回去',hintLabel:'再查一张床位记录',title:'床号和人对不上',question:'当晚临调把床号和实际睡位打乱了；按手里的记录，把四名孩子放回当晚实际待过的位置。',requires:['bed_repair','night_care','daily_issue','temp_bed_full','night_misc'],hints:['不要按床号猜，先处理“04 床停用”。','《晚间小事本》和临调页都写到小满已经睡活动室。','小满→活动室折叠床；豆豆→靠门观察位；乔乔/阿成→原寝室。'],solved:'04床当天停用；小满在折叠床，豆豆在靠门观察位，床号不能再当成人数去数。'},
+  p3:{submitLabel:'合并这条时间线',hintLabel:'找一个前后关系',title:'三份交接写的是同一晚吗？',question:'三份交接没有完整时间；只看无法颠倒的前后关系，试着把它们接成一晚。',requires:['handover_pan','handover_zou','handover_he','shift_strip'],hints:['不需要精确到分钟；先抓“换衣、剪布签、缝腕带、发现错配”。','发现错配一定发生在腕带缝好以后；封南楼梯在纠正腕带以后。','上楼→换衣→剪布签→缝腕带→发现错配→封南楼梯。'],solved:'三份交接前后能接上，写法不同，却落在同一轮换衣、缝带和返工里。'},
+  p3b:{submitLabel:'留下这两句',hintLabel:'核一次称呼',title:'错的是名字，还是地点？',question:'四句话只能留下两句；另外两句会和已经读过的纸正面冲突。',requires:['alias_board','group_note','wristband_a','wristband_b','temp_bed_full'],hints:['先确认“豆豆”是不是陈雨宁，再看腕带上的临时地点。','名字能对上；冲突出在“二层 / 活动室”这两个地点。','应选：两条腕带姓名都能对应本人；两条腕带的临时地点与临调页相反。'],solved:'陈雨宁就是豆豆；两条腕带的人名没错，写反的是临时地点。'},
+  p4:{submitLabel:'改回临时位置',hintLabel:'翻床位旁页',title:'被留下重新核对的是谁？',question:'两条腕带的人名能对上，临时地点却错开了；把它们改回当晚实际的位置。',requires:['wristband_a','wristband_b','doudou_name','identity_observations','clothing_followup','temp_bed_full','rework_note'],hints:['把腕带上的地点和《临时床位调整》并排。','豆豆的登记名是陈雨宁。','林小满应写“活动室折叠床”；陈雨宁应写“靠门观察位”。'],solved:'小满和豆豆被暂留重核；旧线拆掉以后，两条腕带的地点各自改回原记录。'},
+  p5:{submitLabel:'圈出这条路',hintLabel:'再看一个出口条件',title:'19:16 以后还能往哪走？',question:'19:16以后，南楼梯和门厅都出了问题；从活动室出发，哪条路还能一路通到楼外？',requires:['stairs_closed','lobby_water','back_key','slope_access','passage_shift','cart_note'],hints:['先排除已经停用或积水过深的方向。','南楼梯不能走；正门也不适合推车。','活动室→洗衣房→后门坡道。'],solved:'19:16以后，南楼梯停、门厅水深；洗衣房后的后勤坡道仍能让孩子和推车一起通过。'},
+  p6:{submitLabel:'归回原页',hintLabel:'看一眼写作时间',title:'正式报告漏掉了哪一段？',question:'这些句子并不是同一时间写下的；按纸张来源，把它们放回现场、补记和正式报告。',requires:['official_report','supp_pan','supp_zou','supp_he','gym_receive','teacher_margin','report_flow'],hints:['先看日期和纸张用途；内容像不像真话，不是这一题要分的。','带“补记”“事故后”的都不是现场当时写；打印件是正式报告。','两句现场来自原值班/交接；四句事后补写；最后两句来自正式报告。'],solved:'现场纸和补记都留着那次错配；正式报告落笔时，只剩“二次核对无误”。'},
+  p7:{submitLabel:'接好这六组关系',hintLabel:'翻一个直接原因',title:'这些动作当时在处理什么？',question:'六个动作各自对应一个当时必须解决的麻烦；把关系接起来。',requires:[],hints:['优先从已经改过名的锚点开始。','“剪布签”不是原因本身，先问当时衣服去了哪里。','每个动作都能在一份记录中找到直接原因。'],solved:'湿衣、腕带、返工、后门几条线已经接上，桌上还差最后一次按阶段重排。'},
+  p8:{submitLabel:'收起这张时间表',hintLabel:'再看一个阶段',title:'把那一晚排回来',question:'最后把十二件事放回进水、换衣、核对、转移四段；同一段里不必再抠分钟。',requires:[],hints:['先放最明确的：河道水位→进水；体育馆→转移。','“乔乔指出错配”“两孩暂留”“翻生活记录”都属于核对。','库存衣、湿衣、剪布签、缝腕带都属于换衣阶段。'],solved:'四段时间首尾接上，没有哪一张纸被迫塞进不合适的阶段。'}
 };
 
 function missingRecords(meta){return (meta.requires||[]).filter(id=>!state.records.includes(id));}
@@ -362,12 +429,12 @@ function renderPuzzles(){
     if(puzzleStatus(id)){slot.innerHTML=solvedHtml(id);continue;}
     if(id==='p0'){slot.innerHTML=renderP0();continue;}
     if(id==='p3b' && !state.puzzles.p3){slot.innerHTML='';continue;}
-    if(id==='p4' && !state.puzzles.p3b){slot.innerHTML='<div class="puzzle material">值班室那组地点冲突还没分清；先把“名字错 / 地点错”判断清楚。</div>';continue;}
-    if(id==='p5' && !state.puzzles.p4){slot.innerHTML='<div class="puzzle material">两条腕带还没重新核准，先把洗衣房那一段接上。</div>';continue;}
-    if(id==='p6' && !state.puzzles.p5){slot.innerHTML='<div class="puzzle material">撤离路线还没确认，补记暂时先放着。</div>';continue;}
-    if(id==='p7' && !state.puzzles.p6){slot.innerHTML='<div class="puzzle material">两份补记还没有整理完。</div>';continue;}
+    if(id==='p4' && !state.puzzles.p3b){slot.innerHTML='';continue;}
+    if(id==='p5' && !state.puzzles.p4){slot.innerHTML='';continue;}
+    if(id==='p6' && !state.puzzles.p5){slot.innerHTML='';continue;}
+    if(id==='p7' && !state.puzzles.p6){slot.innerHTML='';continue;}
     if(id==='p8' && !state.puzzles.p7){slot.innerHTML='';continue;}
-    const miss=missingRecords(puzzleMeta[id]);if(miss.length){slot.innerHTML=recordsNeededHtml(miss);continue;}
+    const miss=missingRecords(puzzleMeta[id]);if(miss.length){slot.innerHTML='';continue;}
     slot.innerHTML=({p1:renderP1,p2:renderP2,p3:renderP3,p3b:renderP3b,p4:renderP4,p5:renderP5,p6:renderP6,p7:renderP7,p8:renderP8}[id])();
   }
   Object.keys(puzzleMeta).forEach(id=>{const slot=$('#puzzle-'+id);if(slot&&!state.puzzles[id])restorePuzzleDraft(id,slot);});
@@ -473,7 +540,7 @@ function bindPuzzleEvents(){
   });
   $$('.evidence-check input').forEach(i=>i.onchange=()=>{const puzzle=i.closest('.puzzle');capturePuzzleDraft(puzzle?.dataset.puzzle,puzzle);});
 }
-function showHint(id,root){capturePuzzleDraft(id,root);state.hints[id]=Math.min(3,(state.hints[id]||0)+1);save();renderPuzzles();const slot=$('#puzzle-'+id);slot.scrollIntoView({behavior:state.settings.reduceMotion?'auto':'smooth',block:'center'});}
+function showHint(id,root){capturePuzzleDraft(id,root);state.hints[id]=Math.min(3,(state.hints[id]||0)+1);save();renderPuzzles();const slot=$('#puzzle-'+id);scrollWithinScene(slot,state.settings.reduceMotion?'auto':'smooth');}
 function getVals(root,names){const o={};names.forEach(n=>o[n]=root.querySelector(`[name="${n}"]`)?.value||'');return o;}
 function feedback(root,msg,type='error'){const f=$('.feedback',root);f.hidden=false;f.textContent=msg;f.className='feedback '+type;f.setAttribute('tabindex','-1');f.focus({preventScroll:true});}
 function submitPuzzle(id,root){
@@ -522,48 +589,54 @@ function moveOrderItem(button){
   state.drafts=state.drafts||{};state.drafts.p3Order=$$('.order-item',list).map(n=>n.dataset.value);save();
 }
 
-function updateQuestion(){const cq=$('#currentQuestion');if(cq)cq.textContent=currentQuestion();}
+function updateQuestion(){
+  const wrap=$('.question-line'),cq=$('#currentQuestion');if(!wrap||!cq)return;
+  const q=currentQuestion();
+  wrap.hidden=!q;
+  cq.textContent=q||'';
+}
 function currentQuestion(){
   const have=(...ids)=>ids.every(id=>state.records.includes(id));
-  if(!state.puzzles.p0) return '先按门厅原标签完成第一轮清点。';
+  if(!state.puzzles.p0) return '这三只箱子，原本各该归哪一边？';
   if(!state.puzzles.p1){
-    if(!visited('wardrobe')) return '活动室与服装室都开放了；先找能互相核对时间的当晚材料。';
-    if(!have('flood_note','stock_form','wet_clothes','cutting_note')) return '这些布签为什么会留在这里？把同一晚的换衣、湿衣和剪裁记录找齐。';
-    return '四份记录都找到了。把时间接起来，看看那些剪口出现在什么位置。';
+    if(!visited('wardrobe')) return '';
+    if(!have('stock_form','wet_clothes','cutting_note')) return '这些姓名布签为什么会被剪下来？';
+    return '剪布签，发生在换衣之前还是之后？';
   }
   if(!state.puzzles.p2){
-    if(!visited('dorm')) return '二层寝室里还有床位与照护记录；先查清当晚实际睡位有没有变化。';
-    if(!have('bed_repair','night_care','temp_bed_full')) return '寝室里的床牌、维修页和照护页还没对上；把能互相核对的纸找全。';
-    return '床位编号与实际睡位，能不能同时成立？';
+    if(!visited('dorm')) return '';
+    if(!have('bed_repair')) return '这间寝室的床位为什么对不上？';
+    if(!have('night_care','temp_bed_full')) return '04床空着，小满那晚到底睡在哪里？';
+    return '床号、临调页和照护页，哪一项才是当晚实际位置？';
   }
   if(!state.puzzles.p3){
-    if(!visited('records')) return '记录柜还没查完；先读三名工作人员留下的交接。';
-    if(!have('handover_pan','handover_zou','handover_he','shift_strip')) return '三张交接各缺一截。先把它们能接上的地方找出来。';
-    return '这些交接写法不同，它们能不能发生在同一条时间线上？';
+    if(!visited('records')) return '';
+    if(!have('handover_pan','handover_zou','handover_he')) return '三个人的交接，写的是不是同一件事？';
+    return '这些交接能不能排进同一条时间线？';
   }
   if(!state.puzzles.p3b){
-    if(!visited('office')) return '值班室里还有名字、常用称呼与临时位置的对照材料。';
-    if(!have('alias_board','group_note','wristband_a','wristband_b','temp_bed_full')) return '两条腕带与临调页出现冲突；先分别核姓名和地点。';
-    return '冲突究竟落在姓名，还是临时位置？';
+    if(!visited('office')) return '';
+    if(!have('alias_board','wristband_a','wristband_b','temp_bed_full')) return '豆豆、陈雨宁和两条腕带，究竟哪里没对上？';
+    return '错的是人名，还是临时位置？';
   }
   if(!state.puzzles.p4){
-    if(!visited('laundry')) return '后勤记录还有一处没查完：洗衣房。';
-    if(!have('rework_note','identity_observations','clothing_followup')) return '返工便条只有“拆线重缝”。还差两张纸，才能知道写的是谁。';
-    return '地点已经写反；哪两名孩子需要被留下重核？';
+    if(!visited('laundry')) return '';
+    if(!have('rework_note','identity_observations')) return '两条腕带为什么要拆线重缝？';
+    return '那晚被留下重核的两个孩子是谁？';
   }
   if(!state.puzzles.p5){
-    if(!visited('stairs')) return '南楼梯与后勤出口的通行记录还没核完。';
-    if(!have('stairs_closed','lobby_water','back_key','slope_access')) return '先把当时不能走的方向与仍可通行的出口找全。';
-    return '19:16以后，哪条路线还能连续走通？';
+    if(!visited('stairs')) return '';
+    if(!have('stairs_closed','lobby_water','back_key')) return '南楼梯停了以后，他们还能从哪儿出去？';
+    return '19:16以后，哪条路还能从活动室一直走到楼外？';
   }
   if(!state.puzzles.p6){
-    if(!visited('supplement')) return '事故后的材料还剩最后一袋；把现场纸、补记和正式报告分开看。';
-    return '同一件事在三类文件里留下了什么，又少了什么？';
+    if(!visited('supplement')) return '';
+    return '正式报告里，少了哪一段现场经过？';
   }
-  if(!state.puzzles.p7) return '线索已经齐了；先把每个动作和它当时要解决的麻烦接起来。';
-  if(!state.puzzles.p8) return '再把已经确认的事件放回四个阶段，检查整晚有没有断口。';
-  if(!state.unlocked.exit) return '时间线接上了；往下读完整经过，看看有没有哪一步反而说不通。';
-  return '那行21:17没有经手人；它是谁补上的？';
+  if(!state.puzzles.p7) return '这些动作各自在解决什么麻烦？';
+  if(!state.puzzles.p8) return '把整晚排回去，还有没有哪一段接不上？';
+  if(!state.unlocked.exit) return '';
+  return '21:17这一行，谁写的？';
 }
 function refreshAll(){
   renderSections();renderAnchors();renderNav();renderRecordList();renderPuzzles();
@@ -571,16 +644,7 @@ function refreshAll(){
   updateQuestion();
   setupObserver();
 }
-function setupObserver(){
-  if(observer)observer.disconnect();
-  observer=new IntersectionObserver(entries=>{
-    const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
-    if(!visible)return;const loc=visible.target.dataset.location;
-    if(loc){markVisited(loc);updateQuestion();}
-    if(loc&&state.currentLocation!==loc){state.currentLocation=loc;state.unreadLocations=state.unreadLocations||{};state.unreadLocations[loc]=false;$('#saveLabel').textContent=locations.find(x=>x[0]===loc)?.[1]||loc;save();renderNav();}
-  },{rootMargin:'-20% 0px -65% 0px',threshold:[0,.1,.3]});
-  $$('.story-section:not([hidden])').forEach(s=>observer.observe(s));
-}
+function setupObserver(){ if(observer){observer.disconnect();observer=null;} }
 
 function closeMobileDrawers(){[$('#leftNav'),$('#rightRecords')].forEach(x=>x.classList.remove('open'));$('#menuBtn')?.setAttribute('aria-expanded','false');$('#recordsBtn')?.setAttribute('aria-expanded','false');}
 function installImageFallbacks(){
@@ -599,6 +663,17 @@ function installImageFallbacks(){
 
 function wireGlobalEvents(){
   updateContinue();loadSettings();applySettings();installImageFallbacks();
+  let scrollSaveTimer=null;
+  $$('.story-section').forEach(scene=>scene.addEventListener('scroll',()=>{
+    if(!scene.classList.contains('active-scene'))return;
+    clearTimeout(scrollSaveTimer);
+    scrollSaveTimer=setTimeout(()=>{
+      if(!state.started)return;
+      state.scrollPositions=state.scrollPositions||{};
+      state.scrollPositions[scene.dataset.location]=scene.scrollTop;
+      save();
+    },220);
+  },{passive:true}));
   $('#startBtn').addEventListener('click',()=>startGame(false));
   $('#continueBtn').addEventListener('click',()=>{if(loadSave())startGame(true);});
   $$('[data-record]').forEach(b=>b.addEventListener('click',()=>discoverRecord(b.dataset.record)));

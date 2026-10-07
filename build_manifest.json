@@ -1,125 +1,95 @@
 {
   "project": "槐湾孤儿院",
-  "build": "editorial-comic-v7",
+  "build": "editorial-comic-v9",
   "format": "static-web",
-  "save_version": 4,
+  "save_version": 6,
   "build_entry": "BUILD_WINDOWS.bat -> tools/build.py",
   "audio_assets": 0,
   "video_assets": 0,
   "svg_assets_referenced": 0,
-  "image_assets_referenced": 18,
-  "inline_image_slots": 17,
-  "inline_images_unique": 17,
+  "image_assets_referenced": 12,
+  "inline_image_slots": 11,
+  "inline_images_unique": 11,
   "runtime_image_reuse_forbidden": true,
-  "near_duplicate_image_guard": "dHash<14 fails build",
-  "record_entries_referenced": 45,
+  "near_duplicate_image_guard": "whole+large-window dHash<12 fails build",
+  "record_entries_referenced": 48,
   "puzzle_count": 10,
-  "built_at_utc": "2026-10-07T09:54:28Z",
+  "built_at_utc": "2026-10-07T12:14:45Z",
   "files": [
     {
       "path": "assets/final/activity.jpg",
-      "bytes": 286449,
-      "sha256": "ccf884616898cf3edb1d806a2318674578efb8458c198c4270960adb230ca8d9"
-    },
-    {
-      "path": "assets/final/activity_beds.jpg",
-      "bytes": 237195,
-      "sha256": "2955eaeebba2fcc8e97abab45da12fe9f1c3228f5f41b77ced8c41ec91c142ef"
-    },
-    {
-      "path": "assets/final/afterimage.jpg",
-      "bytes": 67209,
-      "sha256": "000849fdd41c28aac793574590bd883d8c42440b9f44eaa75559521ef061a53c"
+      "bytes": 427538,
+      "sha256": "35a761a15ce815d9d1726d642404fad553f30ef9170bf7933d86ea4f3f89fe29"
     },
     {
       "path": "assets/final/bedroom.jpg",
-      "bytes": 287389,
-      "sha256": "89045d539f8c1ccb372d096d035425a57a39c3c5322c4249d4ef3282f17e2557"
+      "bytes": 412022,
+      "sha256": "dd34e8f2c694d9cb917ec18ce01ca85e1ac25f434a9911fb101172f09f1f97d4"
     },
     {
       "path": "assets/final/corridor.jpg",
-      "bytes": 257553,
-      "sha256": "07f00cd9ed3e84bad8b2493b3a4f12dc7b914caa8e6d90e6333c67d56c5a25d3"
+      "bytes": 377890,
+      "sha256": "3bcac64f62bba91755f4859cf2fe89bcd49b98bc9017a01b6540e51d060093b6"
     },
     {
       "path": "assets/final/cover.jpg",
-      "bytes": 312982,
-      "sha256": "b66e0fa732342cbd9056c9e71534fa857b82752be8e21df5d8069730abfb6326"
+      "bytes": 439733,
+      "sha256": "122cc4f3b27944dcd281ed7979949d72ac2b0bfe3cdc0cf1ac629a01d3de974a"
     },
     {
       "path": "assets/final/evac.jpg",
-      "bytes": 258085,
-      "sha256": "70e006733ae2a85199343657021d99698a61c81ae6f3595ab30d80fa1d8cb5f3"
-    },
-    {
-      "path": "assets/final/exit.jpg",
-      "bytes": 160704,
-      "sha256": "7c804dd2806f3ea95778286354fe13b3864c37a62d7323ea4eba420ab5065b54"
+      "bytes": 387043,
+      "sha256": "26697e50d570148ddc37956072a8b60c099e9eef9525e8897be54c395d256ddc"
     },
     {
       "path": "assets/final/gym.jpg",
-      "bytes": 208764,
-      "sha256": "8a05e07b3b6748a2f3e9319b2bafd19dd581059237e0be0bb6df9d7b53b5064f"
-    },
-    {
-      "path": "assets/final/linche_close.jpg",
-      "bytes": 165846,
-      "sha256": "d5e0a3925b6a93e490fea84c597d0c27283fadd0d7ee7c982f1b5b7f0e6b670f"
+      "bytes": 296893,
+      "sha256": "e6f363982c92c612864bc831408cdad105281e71489aa2b699877bac1be4dfdc"
     },
     {
       "path": "assets/final/linche_portrait.jpg",
-      "bytes": 122901,
-      "sha256": "4065a68ba02c43d5348904af708906fc590cb795aa9ea17c28394557a7c06dc1"
-    },
-    {
-      "path": "assets/final/nametag_close.jpg",
-      "bytes": 170172,
-      "sha256": "b059acb1ff0dbbb3bfc8df60420e2cfff8f963e78fd9ad4a3264eff2f936a37d"
+      "bytes": 165607,
+      "sha256": "bad3be1b8f2f54b69456a317a18cb025fa5a3d3a7422b7b7af0791157435828b"
     },
     {
       "path": "assets/final/office_desk.jpg",
-      "bytes": 241612,
-      "sha256": "66502dee748749f42f3065d11b2c7bbd0dedf6c213fc16e6b36ab0977a991199"
+      "bytes": 351985,
+      "sha256": "9974ffe88ff6e8ac1a1c8b0ffafe1ed355afb401486f99f6b3f41c9f18973d7a"
     },
     {
       "path": "assets/final/shenhe_portrait.jpg",
-      "bytes": 142955,
-      "sha256": "6eff32732ee67197df44efe0969e136ee2b14af55b060f7161681f892cc16fa2"
+      "bytes": 200494,
+      "sha256": "51d1a9ae65e8cc7a1d357ed25f3738d28f10920c793fd86f4431cf71393a138c"
     },
     {
       "path": "assets/final/stairs.jpg",
-      "bytes": 141217,
-      "sha256": "2de3d894f8a1f467d8b30d30bf2a754c95f2f32722155aec09f59875672be374"
+      "bytes": 191165,
+      "sha256": "d3520ce9591ec98499eaef7eadd13caaa7ed50806aff64d36f9d46541f8be1a9"
     },
     {
-      "path": "assets/final/wardrobe.jpg",
-      "bytes": 209538,
-      "sha256": "72de1105f10372cbc4cea48a1ac4306c3ab5902cf85417e81ab88004ca067506"
-    },
-    {
-      "path": "assets/final/wrist.jpg",
-      "bytes": 127669,
-      "sha256": "909094de2f58d0a4446777a3413e1581e576a09fbb4afde21601ba01aa46e30f"
+      "path": "assets/final/wardrobe_past.jpg",
+      "bytes": 219309,
+      "sha256": "330e02a7af2d6d07298555cfaa40135b17a711fe6c76f5cd8b02f9ed115d8ee8"
     },
     {
       "path": "assets/final/zhouye_portrait.jpg",
-      "bytes": 129949,
-      "sha256": "ddd8c248459c4612d7553f371f850be29132a59f4ef0460b59510c6537ffd75d"
+      "bytes": 178541,
+      "sha256": "46e07649a46e52a1cb967f3e6e60557fbb4bbc45ef2db44b6aa4ab4eb27b668f"
     },
     {
       "path": "game.js",
-      "bytes": 56266,
-      "sha256": "fb79049c40f7cea21d165255f31856b758e3d3dcd51fff95ef9f9e0fc48131f3"
+      "bytes": 60257,
+      "sha256": "6c4b678b969ed731303e4fd81b85ab7dbec5a53db47ce90cb587ac64dc02854e"
     },
     {
       "path": "index.html",
-      "bytes": 41872,
-      "sha256": "bd09d5155dddbb30dda5f44fc0dd64d5440d598e10c69cf50baeb0bd6edf78f9"
+      "bytes": 48741,
+      "sha256": "06a7a20ab12ed205ced4b0fe5fac4cd565f23b3b00c7c199e7b0c81e57724dc4"
     },
     {
       "path": "styles.css",
-      "bytes": 42729,
-      "sha256": "ee45f326efb64a1c41e050d0154698cbaea9da6d04054791378d82ec1e300659"
+      "bytes": 36391,
+      "sha256": "01df570f8a74d933fc2404cbb31e0c793d8eb63bc3a54a20c4781fb435ba005a"
     }
   ]
 }
