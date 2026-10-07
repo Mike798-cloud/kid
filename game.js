@@ -1,10 +1,10 @@
 (() => {
 'use strict';
 
-const SAVE_KEY = 'huaiwan_orphanage_save_v3';
-const LEGACY_SAVE_KEY = 'huaiwan_orphanage_save_v2';
-const SETTINGS_KEY = 'huaiwan_orphanage_settings_v3';
-const LEGACY_SETTINGS_KEY = 'huaiwan_orphanage_settings_v2';
+const SAVE_KEY = 'huaiwan_orphanage_save_v4';
+const LEGACY_SAVE_KEYS = ['huaiwan_orphanage_save_v3','huaiwan_orphanage_save_v2'];
+const SETTINGS_KEY = 'huaiwan_orphanage_settings_v4';
+const LEGACY_SETTINGS_KEYS = ['huaiwan_orphanage_settings_v3','huaiwan_orphanage_settings_v2'];
 
 const locations = [
   ['lobby','门厅'],['activity','活动室'],['wardrobe','服装室'],['dorm','二层寝室'],['records','记录柜'],['office','值班室'],
@@ -51,7 +51,8 @@ const anchorConfig = {
 const records = {
   entry_rules:{title:'清点登记说明',meta:'现代 / 拆除前移交',body:[
     '能辨认的纸质材料登记标题、日期、来源位置；不做现场修复',
-    '可移交学校的普通教育史旧物单独装箱；建筑拆除相关材料留给拆除队；无法确认去向的暂存'
+    '可移交学校的普通教育史旧物单独装箱；建筑拆除相关材料留给拆除队；无法确认去向的暂存',
+    '每离开一处，补写清点时间与经手人；未签经手人的行不计入正式移交记录'
   ]},
   box_labels:{title:'三只纸箱标签',meta:'现代 / 门厅',lines:['A箱：学校接收——普通教学与儿童生活旧物','B箱：拆除队——建筑、钥匙、维修、施工相关','C箱：待确认——来源或去向不明']},
   temp_bed_partial:{title:'《临时床位调整》受潮页',meta:'十九年前 / 18:30 后',lines:['低龄组暂移活动室，折叠床另记','……04 床……停……','……靠门……观察……']},
@@ -121,7 +122,7 @@ const records = {
 };
 
 const defaultState = () => ({
-  version:3,started:false,
+  version:4,started:false,
   unlocked:{lobby:true,activity:false,wardrobe:false,dorm:false,records:false,office:false,laundry:false,stairs:false,supplement:false,rebuild:false,rainnight:false,exit:false},
   unreadLocations:{lobby:false,activity:false,wardrobe:false,dorm:false,records:false,office:false,laundry:false,stairs:false,supplement:false,rebuild:false,rainnight:false,exit:false},
   visitedLocations:['lobby'],
@@ -142,7 +143,7 @@ const $$ = (s,root=document)=>[...root.querySelectorAll(s)];
 
 function loadSettings(){
   try{
-    const raw=localStorage.getItem(SETTINGS_KEY)||localStorage.getItem(LEGACY_SETTINGS_KEY)||'null';
+    const raw=localStorage.getItem(SETTINGS_KEY)||LEGACY_SETTINGS_KEYS.map(k=>localStorage.getItem(k)).find(Boolean)||'null';
     const saved=JSON.parse(raw); if(saved) Object.assign(state.settings,saved);
   }catch{}
 }
@@ -150,7 +151,7 @@ function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify(state.s
 function save(){state.lastSavedAt=Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(state));updateContinue();}
 function normalizeLoadedState(saved){
   const fresh=defaultState();
-  const merged={...fresh,...saved,version:3};
+  const merged={...fresh,...saved,version:4};
   merged.unlocked={...fresh.unlocked,...(saved.unlocked||{})};
   merged.unreadLocations={...fresh.unreadLocations,...(saved.unreadLocations||{})};
   merged.anchors={...fresh.anchors,...(saved.anchors||{})};
@@ -162,16 +163,16 @@ function normalizeLoadedState(saved){
 }
 function loadSave(){
   try{
-    const raw=localStorage.getItem(SAVE_KEY)||localStorage.getItem(LEGACY_SAVE_KEY); if(!raw) return false;
-    const saved=JSON.parse(raw); if(!saved||![2,3].includes(saved.version)) return false;
+    const raw=localStorage.getItem(SAVE_KEY)||LEGACY_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean); if(!raw) return false;
+    const saved=JSON.parse(raw); if(!saved||![2,3,4].includes(saved.version)) return false;
     state=normalizeLoadedState(saved); loadSettings(); save(); return true;
   }catch{return false;}
 }
-function clearSave(){localStorage.removeItem(SAVE_KEY);localStorage.removeItem(LEGACY_SAVE_KEY);state=defaultState();loadSettings();}
+function clearSave(){localStorage.removeItem(SAVE_KEY);LEGACY_SAVE_KEYS.forEach(k=>localStorage.removeItem(k));state=defaultState();loadSettings();}
 
 function updateContinue(){
   const b=$('#continueBtn'); if(!b) return;
-  b.hidden=!(localStorage.getItem(SAVE_KEY)||localStorage.getItem(LEGACY_SAVE_KEY));
+  b.hidden=!(localStorage.getItem(SAVE_KEY)||LEGACY_SAVE_KEYS.some(k=>localStorage.getItem(k)));
 }
 function applySettings(){
   document.documentElement.style.setProperty('--font-scale', String(state.settings.fontScale||1));
@@ -351,9 +352,9 @@ function recordsNeededHtml(ids){
 function puzzleShell(id,inner){
   const m=puzzleMeta[id];markPuzzleSeen(id);
   const hintLevel=state.hints[id]||0;const hint=hintLevel?`<div class="hint-box">提示 ${hintLevel}：${escapeHtml(m.hints[hintLevel-1])}</div>`:'';
-  return `<div class="puzzle" data-puzzle="${id}"><h3>${escapeHtml(m.title)}</h3><p class="question">${escapeHtml(m.question)}</p>${inner}<div class="puzzle-actions"><button class="submit" data-action="submit" data-puzzle="${id}">确认判断</button><button class="hint-btn" data-action="hint" data-puzzle="${id}">看一条提示</button></div><div class="feedback" role="status" tabindex="-1" hidden></div>${hint}</div>`;
+  return `<div class="puzzle puzzle-${id}" data-puzzle="${id}"><h3>${escapeHtml(m.title)}</h3><p class="question">${escapeHtml(m.question)}</p>${inner}<div class="puzzle-actions"><button class="submit" data-action="submit" data-puzzle="${id}">确认判断</button><button class="hint-btn" data-action="hint" data-puzzle="${id}">看一条提示</button></div><div class="feedback" role="status" tabindex="-1" hidden></div>${hint}</div>`;
 }
-function solvedHtml(id){const m=puzzleMeta[id];return `<div class="puzzle solved"><h3>${escapeHtml(m.title)}</h3><div class="feedback success">${escapeHtml(m.solved||'这组关系能接得上。')}</div></div>`;}
+function solvedHtml(id){const m=puzzleMeta[id];return `<div class="puzzle solved puzzle-${id}"><h3>${escapeHtml(m.title)}</h3><div class="feedback success">${escapeHtml(m.solved||'这组关系能接得上。')}</div></div>`;}
 
 function renderPuzzles(){
   for(const id of Object.keys(puzzleMeta)){
@@ -524,43 +525,45 @@ function moveOrderItem(button){
 function updateQuestion(){const cq=$('#currentQuestion');if(cq)cq.textContent=currentQuestion();}
 function currentQuestion(){
   const have=(...ids)=>ids.every(id=>state.records.includes(id));
-  if(!state.puzzles.p0) return '先把门厅三只箱子按原标签分开，清点才能继续。';
+  if(!state.puzzles.p0) return '先按门厅原标签完成第一轮清点。';
   if(!state.puzzles.p1){
-    if(!visited('wardrobe')) return '活动室和服装室已经能进；先找出与事故当晚直接有关的材料。';
-    if(!have('flood_note','stock_form','wet_clothes','cutting_note')) return '服装室里为什么留下这么多被剪过的姓名布签？先把换衣和剪布签的时间找齐。';
-    return '换干衣和剪布签，究竟哪件事先发生？';
+    if(!visited('wardrobe')) return '活动室与服装室都开放了；先找能互相核对时间的当晚材料。';
+    if(!have('flood_note','stock_form','wet_clothes','cutting_note')) return '这些布签为什么会留在这里？把同一晚的换衣、湿衣和剪裁记录找齐。';
+    return '四份记录都在手里：先后顺序能不能解释这些剪口？';
   }
   if(!state.puzzles.p2){
-    if(!visited('dorm')) return '二层寝室开放了；那张空出来的04床，当晚到底有没有人在用？';
-    if(!have('bed_repair','night_care','temp_bed_full')) return '04床当天停用以后，小满、豆豆、乔乔和阿成实际待在哪里？';
-    return '床号、临调页和照护记录能不能同时成立？';
+    if(!visited('dorm')) return '二层寝室里还有床位与照护记录；先查清当晚实际睡位有没有变化。';
+    if(!have('bed_repair','night_care','temp_bed_full')) return '寝室里的床牌、维修页和照护页还没对上；把能互相核对的纸找全。';
+    return '床位编号与实际睡位，能不能同时成立？';
   }
   if(!state.puzzles.p3){
-    if(!visited('records')) return '记录柜里还有当晚三名工作人员留下的交接；先看看它们写的是不是同一段事。';
-    if(!have('handover_pan','handover_zou','handover_he','shift_strip')) return '三份交接各自只写了一截；先把能确定的前后关系找齐。';
-    return '三份写法不同的交接，能不能排进同一条时间链？';
+    if(!visited('records')) return '记录柜还没查完；先读三名工作人员留下的交接。';
+    if(!have('handover_pan','handover_zou','handover_he','shift_strip')) return '每张交接只写了一截；先把能确定的前后关系补齐。';
+    return '这些交接写法不同，它们能不能发生在同一条时间线上？';
   }
   if(!state.puzzles.p3b){
-    if(!visited('office')) return '值班室还有姓名和临时位置对照；先查清“豆豆”与“陈雨宁”是不是同一个人。';
-    if(!have('alias_board','group_note','wristband_a','wristband_b','temp_bed_full')) return '两条腕带哪里不对？先把登记名、小名和临时地点分别对一遍。';
-    return '腕带错的是孩子的姓名，还是当晚临时待的位置？';
+    if(!visited('office')) return '值班室里还有名字、常用称呼与临时位置的对照材料。';
+    if(!have('alias_board','group_note','wristband_a','wristband_b','temp_bed_full')) return '两条腕带与临调页出现冲突；先分别核姓名和地点。';
+    return '冲突究竟落在姓名，还是临时位置？';
   }
   if(!state.puzzles.p4){
-    if(!visited('laundry')) return '洗衣房留下了腕带返工记录；去确认哪两个孩子被暂时留下重核。';
-    return '已经知道地点写反了——哪两个孩子需要拆线重缝？';
+    if(!visited('laundry')) return '后勤记录还有一处没查完：洗衣房。';
+    if(!have('rework_note','identity_observations','clothing_followup')) return '返工便条写了“拆线重缝”；再找两份能确认对象的文字记录。';
+    return '地点已经写反；哪两名孩子需要被留下重核？';
   }
   if(!state.puzzles.p5){
-    if(!visited('stairs')) return '南楼梯那边还有通行记录；先确认19:16以后哪些路已经不能走。';
-    return '正门进水、南楼梯停用以后，队伍还能从哪条连续路线撤出去？';
+    if(!visited('stairs')) return '南楼梯与后勤出口的通行记录还没核完。';
+    if(!have('stairs_closed','lobby_water','back_key','slope_access')) return '先把当时不能走的方向与仍可通行的出口找全。';
+    return '19:16以后，哪条路线还能连续走通？';
   }
   if(!state.puzzles.p6){
-    if(!visited('supplement')) return '事故后的补记和正式报告放在一起；看看“腕带错配”后来被写到了哪里。';
-    return '现场纸、事后补记、正式报告之间，哪些内容被保留，哪些只剩一句结果？';
+    if(!visited('supplement')) return '事故后的材料还剩最后一袋；把现场纸、补记和正式报告分开看。';
+    return '同一件事在三类文件里留下了什么，又少了什么？';
   }
-  if(!state.puzzles.p7) return '现在线索都在桌上：剪布签、缝腕带、留人、借钥匙——每一步各自在解决什么麻烦？';
-  if(!state.puzzles.p8) return '把已经确认的事件放回四个阶段，看看这一晚还有没有断开的地方。';
-  if(!state.unlocked.exit) return '时间链已经接上；继续往下读，确认完整经过有没有反过来推翻前面的判断。';
-  return '登记夹多出的那行“21:17　三人离场”，是谁写的？';
+  if(!state.puzzles.p7) return '线索已经齐了；先把每个动作和它当时要解决的麻烦接起来。';
+  if(!state.puzzles.p8) return '再把已经确认的事件放回四个阶段，检查整晚有没有断口。';
+  if(!state.unlocked.exit) return '时间线接上了；往下读完整经过，看看有没有哪一步反而说不通。';
+  return '那行21:17没有经手人；它是谁补上的？';
 }
 function refreshAll(){
   renderSections();renderAnchors();renderNav();renderRecordList();renderPuzzles();
