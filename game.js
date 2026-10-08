@@ -129,7 +129,7 @@ const defaultState = () => ({
   unlocked:{prologue:true,lobby:false,activity:false,wardrobe:false,dorm:false,records:false,office:false,laundry:false,stairs:false,supplement:false,rebuild:false,rainnight:false,exit:false},
   unreadLocations:{prologue:false,lobby:false,activity:false,wardrobe:false,dorm:false,records:false,office:false,laundry:false,stairs:false,supplement:false,rebuild:false,rainnight:false,exit:false},
   visitedLocations:['prologue'],
-  records:[], puzzles:{}, attempts:{}, hints:{}, puzzleSeenAt:{}, formDrafts:{}, drafts:{},
+  records:[], puzzles:{}, attempts:{}, hints:{}, puzzleSeenAt:{}, formDrafts:{}, drafts:{}, inspectedP4:[],
   anchors:Object.fromEntries(Object.keys(anchorConfig).map(k=>[k,{state:0,unread:false}])),
   currentLocation:'prologue', returnLocation:null, scrollPositions:{},
   settings:{fontScale:1,reduceMotion:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches||false},
@@ -140,6 +140,7 @@ let state = defaultState();
 let lastDialogFocus = null;
 let observer = null;
 let toastTimer = null;
+let recordSearchText = '';
 
 const $ = (s,root=document)=>root.querySelector(s);
 const $$ = (s,root=document)=>[...root.querySelectorAll(s)];
@@ -162,6 +163,7 @@ function normalizeLoadedState(saved){
   merged.visitedLocations=Array.isArray(saved.visitedLocations)?saved.visitedLocations:['prologue',saved.currentLocation].filter(Boolean);
   merged.formDrafts=saved.formDrafts||{};
   merged.drafts=saved.drafts||{};
+  merged.inspectedP4=Array.isArray(saved.inspectedP4)?saved.inspectedP4.filter(x=>['tag','band','thread'].includes(x)):[];
   merged.scrollPositions={...fresh.scrollPositions,...(saved.scrollPositions||{})};
   merged.unlocked.prologue=true;
   merged.unreadLocations.prologue=false;
@@ -198,7 +200,7 @@ function startGame(fromSave=false){
     state=defaultState();state.settings=settings;state.started=true;state.startedAt=Date.now();saveSettings();save();
   } else {state.started=true;}
   document.body.classList.add('game-running');
-  $('#startScreen').hidden=true;$('#gameShell').hidden=false;applySettings();refreshAll();
+  $('#startScreen').hidden=true;$('#gameShell').hidden=false;applySettings();refreshAll();primeSceneImages(state.currentLocation);
   requestAnimationFrame(()=>{
     restoreSceneScroll(true);
     $('#mainGame').focus({preventScroll:true});
@@ -216,7 +218,8 @@ function markVisited(loc){
   if(!state.visitedLocations.includes(loc)){state.visitedLocations.push(loc);save();}
 }
 function visited(loc){return (state.visitedLocations||[]).includes(loc);}
-function unlock(loc){if(!state.unlocked[loc]){state.unlocked[loc]=true;state.unreadLocations=state.unreadLocations||{};state.unreadLocations[loc]=true;save();}}
+function primeSceneImages(loc){if(!loc)return;$$('#loc-'+loc+' img[loading="lazy"]').forEach(img=>{img.loading='eager';});}
+function unlock(loc){if(!state.unlocked[loc]){state.unlocked[loc]=true;state.unreadLocations=state.unreadLocations||{};state.unreadLocations[loc]=true;save();}primeSceneImages(loc);}
 function hasRecords(ids){return ids.every(id=>state.records.includes(id));}
 function discoverRecord(id){
   if(!records[id]) return;
@@ -365,16 +368,32 @@ function recordGroup(id,r){
 }
 function renderRecordList(){
   const root=$('#recordList');root.innerHTML='';
-  if(!state.records.length){root.innerHTML='<p class="empty">翻过的纸会按来源留在这里；需要时可以重新打开，不必靠记忆硬背。</p>';return;}
+  const query=recordSearchText.trim().toLocaleLowerCase('zh-CN');
+  const available=state.records.filter(id=>!!records[id]);
+  const filtered=available.filter(id=>{
+    if(!query)return true;
+    const r=records[id];
+    return [r.title,r.meta,...(r.body||[]),...(r.lines||[])].join(' ').toLocaleLowerCase('zh-CN').includes(query);
+  });
+  const count=$('#recordCount');if(count)count.textContent=query?`找到 ${filtered.length} 份，共已收 ${available.length} 份`:`已收 ${available.length} 份`;
+  $('#clearRecordSearch').hidden=!query;
+  if(!available.length){const p=document.createElement('p');p.className='empty';p.textContent='翻过的纸会按来源留在这里；需要时可以重新打开。';root.appendChild(p);return;}
+  if(!filtered.length){const p=document.createElement('p');p.className='empty';p.textContent='没有找到相符的纸，换个词试试。';root.appendChild(p);return;}
   const order=['今晚清点','事故当晚','事故后材料','旧日常记录'];
   const groups=Object.fromEntries(order.map(x=>[x,[]]));
-  state.records.forEach(id=>{const r=records[id];if(r)groups[recordGroup(id,r)].push(id);});
+  filtered.forEach(id=>groups[recordGroup(id,records[id])].push(id));
   order.forEach(group=>{
     if(!groups[group].length)return;
     const h=document.createElement('h3');h.className='record-group-title';h.textContent=group;root.appendChild(h);
-    [...groups[group]].reverse().forEach(id=>{const r=records[id];const b=document.createElement('button');b.innerHTML=`${escapeHtml(r.title)}<span>${escapeHtml(r.meta||'')}</span>`;b.addEventListener('click',()=>openRecord(id));root.appendChild(b);});
+    [...groups[group]].reverse().forEach(id=>{
+      const r=records[id];const b=document.createElement('button');b.type='button';
+      const title=document.createElement('strong');title.textContent=r.title;
+      const meta=document.createElement('span');meta.textContent=r.meta||'';
+      b.append(title,meta);b.addEventListener('click',()=>openRecord(id));root.appendChild(b);
+    });
   });
 }
+
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
 function puzzleStatus(id){return state.puzzles[id]||null;}
@@ -414,25 +433,25 @@ function solvePuzzle(id,skipped=false){
     setAnchorState('papers',2,true);unlock('rebuild');
   }
   if(id==='p7'){
-    showToast('五个片段都找到了直接来源');
+    showToast('那五张纸终于各有了出处');
   }
   if(id==='p8'){
-    setAnchorState('temp_place',2,false);unlock('rainnight');showToast('桌上的材料已经排回四段时间');
+    setAnchorState('temp_place',2,false);unlock('rainnight');showToast('四段时间已经核准，认不出的字仍留空');
   }
   refreshAll();
 }
 
 const puzzleMeta = {
   p0:{title:'门厅登记',question:'',requires:['entry_rules','box_labels'],solved:'门厅这批材料已经按原标签登记，三只箱子推到了干燥处。'},
-  p1:{submitLabel:'把先后记下来',hintLabel:'看一眼时间旁注',title:'四张纸的先后',question:'以 18:34 的库存衣领用为分界，把四份记录放到“领干衣以前 / 领干衣及以后”两边。先只看纸上的时间。',requires:['flood_note','stock_form','wet_clothes','cutting_note'],hints:['先只看每张纸上的时间。','18:34 是领出库存衣的时刻；剪裁条是 18:41。','18:12—18:27 在前；18:34、18:37、18:41 都在领干衣及以后。'],solved:'18:34 开始领干衣，18:37 收拢湿衣，18:41 才剪下旧衣上的姓名布签；布签离开衣物，不等于孩子的身份被改动。',next:['dorm','带上这几张纸，去二层寝室']},
+  p1:{submitLabel:'核准这条时间线',hintLabel:'看一眼页边时间',title:'一条布签的去向',question:'把四张纸按发生先后排好，再判断旧衣上的姓名布签最终去了哪里。',requires:['flood_note','stock_form','wet_clothes','cutting_note'],hints:['先核对纸上记下的时间，注意进水的时间范围。','进水记录从 18:12 开始；领用 18:34，收拢湿衣 18:37，剪下布签 18:41。','旧衣姓名布签剪下后不是废弃，而是缝到写好临时位置的底带上。'],solved:'18:34 开始领干衣，18:37 收拢湿衣，18:41 才剪下旧衣上的姓名布签；布签离开衣物，不等于孩子的身份被改动。',next:['dorm','带上这几张纸，去二层寝室']},
   p2:{submitLabel:'把位置写回去',hintLabel:'再查一张床位记录',title:'床号和实际位置',question:'按当晚临调和照护页，把四名孩子放回实际待过的位置。空着的床不自动代表少了一个人。',requires:['bed_repair','night_care','daily_issue','temp_bed_full','night_misc'],hints:['先处理“04 床停用”，不要按空床数量猜。','《晚间小事本》和临调页都写到小满已经睡活动室。','小满→活动室折叠床；豆豆→靠门观察位；乔乔、阿成仍对应二层原寝室。'],solved:'04 床当天上午已经停用；小满在折叠床，豆豆在靠门观察位，乔乔和阿成仍在原寝室。',next:['records','把床位页夹好，去记录柜']},
   p3:{submitLabel:'按这个顺序压好',hintLabel:'找一条不能颠倒的关系',title:'三份交接的先后',question:'三份交接没有把每一分钟都写全。只排那些无法颠倒的动作，看看它们能不能来自同一晚。',requires:['handover_pan','handover_zou','handover_he','shift_strip'],hints:['先抓“换衣、剪布签、缝腕带、发现问题”四个必然有先后的动作。','腕带必须先缝好，才可能被发现对应有误；南楼梯停用又发生在返工以后。','上楼→换衣→剪布签→缝腕带→发现对应有误→封南楼梯。'],solved:'三份交接的写法不同，前后却能落进同一轮换衣、缝带和返工。',next:['office','把三份交接夹在一起，去值班室']},
   p3b:{submitLabel:'留下能同时成立的两句',hintLabel:'先核一次称呼',title:'腕带哪里出了错',question:'四句话里只能留下两句；留下的内容必须能被登记名、临调页和两条腕带同时支持。',requires:['alias_board','group_note','wristband_a','wristband_b','temp_bed_full'],hints:['先确认“豆豆”是不是陈雨宁，再比较两条位置底带。','姓名能对应本人；冲突出在“折叠床 / 靠门观察位”的对应关系。','应留下“姓名都能对应本人”和“两条位置底带与临调页正好颠倒”。'],solved:'陈雨宁就是豆豆；两条腕带的姓名布签属于本人，拿反的是写着临时位置的底带。',next:['laundry','把两条抄记带去洗衣房']},
-  p4:{submitLabel:'圈出返工依据',hintLabel:'看返工便条旁边两张纸',title:'为什么要拆线重缝',question:'返工便条只写了“拆线重缝”。从已经读过的纸里，圈出真正让这次返工成立的两条依据。',requires:['wristband_a','wristband_b','doudou_name','identity_observations','clothing_followup','temp_bed_full','rework_note'],hints:['姓名没有换人；先看位置底带和临调页。','错误发生在两条位置底带互相颠倒，返工便条又要求拆下旧线后重新缝。','应留下“位置底带与临调页相反”和“拆线后旧线不再使用、重新缝合”。'],solved:'小满和豆豆被留在桌边，不是因为身份不明，而是要把姓名布签从错误的位置底带上拆下，再照临调页重新缝。',next:['stairs','收好针线记录，去南楼梯']},
+  p4:{submitLabel:'记下红线的来历',hintLabel:'从工作台上找旧线的用途',title:'红线为什么留在桌上',question:'网上的照片只拍到了红线。翻看桌上留下的三个位置，再根据针线领用、返工便条和腕带抄记判断这截红线的来历。',requires:['wristband_a','wristband_b','rework_note','thread_ledger','needle_box'],hints:['线是什么用途，先看针线柜和长期领用页。','注意底带预写的位置，以及后来被剪断的针脚。','红线是常用的缝厚布材料；那晚拆开缝错的腕带，剪断的旧线留在工作台。'],solved:'红线本是洗衣房常备的粗棉线。错配腕带拆线重缝时，剪断的旧线被留在工作台；被拍成怪谈的，是返工留下的痕迹。',next:['stairs','收好针线记录，去南楼梯']},
   p5:{submitLabel:'圈出还能走的线',hintLabel:'再看一个出口条件',title:'19:16 以后还能往哪走',question:'南楼梯停用、门厅积水以后，从二层活动室出发，哪条后勤线还能连续接到楼外？',requires:['stairs_closed','lobby_water','back_key','slope_access','passage_shift','cart_note'],hints:['先排除已经停用或不适合推车的方向。','南楼梯不能走；正门也不适合推车；活动室东侧另有后勤内梯。','活动室→后勤内梯→洗衣房→后门坡道。'],solved:'19:16 以后，能连续通行的是活动室东侧后勤内梯、洗衣房和后门坡道。',next:['supplement','沿记录里的出口，回去看事故补记']},
-  p6:{submitLabel:'按来源归回去',hintLabel:'看一眼页角日期',title:'同一晚留下了三种写法',question:'把六句话归回“当晚现场 / 事后补写 / 正式报告”。只认页角日期和纸张来源，不替任何一张纸补解释。',requires:['official_report','supp_pan','supp_zou','supp_he','report_flow'],hints:['先看日期和纸张用途。','带“补记”“事故后”的不是当晚原页；打印件属于正式报告。','前两句来自当晚交接；中间两句是事后补写；最后两句出自正式报告。'],solved:'当晚原页和事后补记留下了返工经过；正式报告只保留了二次核对与转移结果。',next:['rebuild','把不同年代的纸分开，回到桌边']},
-  p7:{submitLabel:'把原始记录压到下面',hintLabel:'找一张最直接的纸',title:'五个怪谈片段从哪里来',question:'把流传最广的五个片段，各接回一份能直接解释它的原始记录。接不上的地方不要靠猜补齐。',requires:[],hints:['先从“空着的 04 床”开始，它有当天上午的维修单。','“红线”要看常规针线领用与返工；“后门”要看撤离路线。','五组分别对应：常规针线与返工、腕带重核、04 床停用、南楼梯结构停用、后勤撤离。'],solved:'五个看起来最像怪谈的片段，都能接回具体的工作记录；剩下需要重排的只有时间。'},
-  p8:{submitLabel:'收起这张时间表',hintLabel:'再看一个阶段',title:'把那一晚分回四段',question:'把十件事归回进水、换衣、核对、转移四段。分钟仍以原纸为准，这里只收拢阶段。',requires:[],hints:['先放最明确的：河道水位→进水；体育馆→转移。','指出位置带拿反和拆线返工都属于核对。','库存衣、剪布签、缝腕带属于换衣；楼梯停用、借后门钥匙属于转移。'],solved:'四段首尾能接上，没有哪张纸需要被硬塞进不合适的阶段。',next:['rainnight','把材料收拢，按这一晚重新读一遍']}
+  p6:{submitLabel:'核对这三处差别',hintLabel:'再核一次原页',title:'报告写对了什么，漏掉了什么',question:'正式报告写了转移结果，却没有重现桌边的全部经过。对照当晚交接、事故后补记和体育馆接收页，分清“可以确认”“没有写”和“不能推断”。',requires:['official_report','supp_pan','supp_zou','supp_he','report_flow','gym_receive','handover_zou'],hints:['先看当晚交接有没有留下“拿反、拆线”这一步，再核事故后的书面说明。','“二次核对无误”描述最后结果，不代表前面没有出现失误；体育馆接收页还能核对到场情况。','能够同时支持返工的是当晚交接和事后补记；正式报告省去了过程，体育馆页确认四名孩子到场。'],solved:'当晚的交接记下了位置底带拿反，事后补记补全了拆线经过；正式报告的“核对无误”并非假话，但省去了错误如何被发现和纠正。体育馆再次点名，未显示有人缺席。',next:['rebuild','带着几份有分歧的纸，回到桌边']},
+  p7:{submitLabel:'把五处出处压好',hintLabel:'翻开纸夹细看',title:'被截断的五张照片',question:'网上的照片只留下一半画面。五摞纸中各有两份原始记录；亲自翻过日期和内容，再把传言放回真正发生过的现场。',requires:[],hints:['找两种能相互补充的原始记录，不要只根据传言中的名词挑选。','旧日常的用料簿能解释线的用途；当天上午的修理单能解释空床。','甲是楼梯与积水，乙是粗线与返工，丙是床架与调床，丁是后门与坡道，戊是交接与临调。'],solved:'五段传言都可以接回纸面上的场景：普通材料、临时留人、床架停用、结构封闭与后勤撤离。没有哪一份原页能支持“有人被带走或失踪”的说法。'},
+  p8:{submitLabel:'核准最后一页',hintLabel:'沿着原始时间往下看',title:'给四段时间找到起点',question:'把四段经过接回纸上的时间。之后还有一处只留下半个字的缺口：没有足够证据时，哪一格应当保持空白？',requires:[],hints:['18:12 看水位和人员上楼；18:34 是换衣物资领用。','18:56 有孩子提出腕带不对；19:16 是改变撤离路线的时刻。','报告漏写的返工可以通过交接补上；但便条边缘那个“乔”字，无法判定是谁写下的。'],solved:'18:12 进水、18:34 换衣、18:56 发现位置错配、19:16 南楼梯停用。返工过程已有多份材料支持；便条上那个孤零零的“乔”字，仍无法确认写字的人。',next:['rainnight','合上纸夹，读一遍那一晚']}
 };
 
 function missingRecords(meta){return (meta.requires||[]).filter(id=>!state.records.includes(id));}
@@ -475,9 +494,10 @@ function select(name,opts,prompt='请选择'){
 }
 function renderP0(){return '';}
 function renderP1(){
-  const opts=[['before','领干衣以前'],['after','领干衣及以后']];
-  const rows=[['flood','《一层进水简记》18:12—18:27'],['stock','《库存衣物领用单》18:34'],['wet','《湿衣收拢表》18:37'],['cut','《后勤剪裁条》18:41']];
-  return puzzleShell('p1',`<div class="puzzle-grid">${rows.map(r=>`<div class="puzzle-row"><label>${r[1]}</label>${select(r[0],opts)}</div>`).join('')}</div>`);
+  const labels={wet:'《湿衣收拢表》18:37',flood:'《一层进水简记》18:12—18:27',cut:'《后勤剪裁条》18:41',stock:'《库存衣物领用单》18:34'};
+  const order=state.drafts?.p1Order||['wet','cut','flood','stock'];
+  const opts=[['identity','旧衣的姓名布签转缝到写有临时位置的腕带底带'],['discard','旧衣一收走，姓名布签便一起作废'],['rename','临时调床后，每个孩子都重新改登记姓名']];
+  return puzzleShell('p1',`<p class="small puzzle-note">先排四张纸的时间，再判断旧布签是否被保留使用。</p><ol class="order-list" data-order-list data-order-id="p1">${order.map((x,i)=>`<li class="order-item" data-value="${x}"><span>${i+1}. ${labels[x]}</span><span class="order-controls"><button type="button" data-move="up" aria-label="${labels[x]} 上移">↑</button><button type="button" data-move="down" aria-label="${labels[x]} 下移">↓</button></span></li>`).join('')}</ol><div class="puzzle-row"><label>剪下的布签后来如何使用？</label>${select('tag_role',opts,'从领用单和剪裁条判断')}</div>`);
 }
 function renderP2(){
   const opts=[['dorm','二层原寝室'],['fold','活动室折叠床'],['door','活动室靠门观察位']];
@@ -487,7 +507,7 @@ function renderP3(){
   const initial=['上楼','换衣','剪布签','缝腕带','发现错配','封南楼梯'];
   const shuffled=['换衣','上楼','缝腕带','剪布签','封南楼梯','发现错配'];
   const arr=(state.drafts?.p3Order)||shuffled;
-  return puzzleShell('p3',`<ol class="order-list" data-order-list>${arr.map((x,i)=>`<li class="order-item" data-value="${x}"><span>${i+1}. ${x}</span><span class="order-controls"><button type="button" data-move="up" aria-label="${x} 上移">↑</button><button type="button" data-move="down" aria-label="${x} 下移">↓</button></span></li>`).join('')}</ol><p class="small">纸边只排能确认的先后，不补原纸里没有的分钟数。</p>`);
+  return puzzleShell('p3',`<ol class="order-list" data-order-list data-order-id="p3">${arr.map((x,i)=>`<li class="order-item" data-value="${x}"><span>${i+1}. ${x}</span><span class="order-controls"><button type="button" data-move="up" aria-label="${x} 上移">↑</button><button type="button" data-move="down" aria-label="${x} 下移">↓</button></span></li>`).join('')}</ol><p class="small">纸边只排能确认的先后，不补原纸里没有的分钟数。</p>`);
 }
 function renderP3b(){
   const statements=[
@@ -499,13 +519,15 @@ function renderP3b(){
   return puzzleShell('p3b',`<div class="evidence-lines">${statements.map(x=>`<label class="evidence-check"><input type="checkbox" name="${x[0]}"> <span>${x[1]}</span></label>`).join('')}</div><p class="small">纸边只留两处勾记；留下的两句必须能被已经读过的记录同时支持。</p>`);
 }
 function renderP4(){
-  const statements=[
-    ['r1','两条腕带的位置底带与临调页正好颠倒'],
-    ['r2','两名孩子的姓名布签本身无法辨认'],
-    ['r3','红色粗棉线只在事故当晚出现'],
-    ['r4','返工便条要求拆掉旧线后重新缝合']
+  const inspected=state.inspectedP4||[];
+  const objects=[
+    ['tag','布签的反面','旧针脚穿过布边，字迹仍是孩子原来的姓名。'],
+    ['band','位置底带','“折叠床”和“靠门观察位”的字压在新针脚下面，比这次缝合更早。'],
+    ['thread','桌边的线头','几小段红线是剪开的旧针脚，和针线柜里常用的粗线同色。']
   ];
-  return puzzleShell('p4',`<div class="evidence-lines">${statements.map(x=>`<label class="evidence-check"><input type="checkbox" name="${x[0]}"> <span>${x[1]}</span></label>`).join('')}</div>`);
+  const rows=objects.map(o=>`<div class="workbench-object"><button type="button" data-inspect="${o[0]}" data-label="${o[1]}" aria-expanded="${inspected.includes(o[0])}">${o[1]}　${inspected.includes(o[0])?'收起':'翻看'}</button><p ${inspected.includes(o[0])?'':'hidden'}>${o[2]}</p></div>`).join('');
+  const opts=[['cloth','衣物按尺码重新发放，留下剪线'],['repair','位置腕带拆线重缝，旧线剪断留在桌上'],['symbol','工作人员特意用红线标出两名孩子'],['names','把两个孩子的登记名字互相替换']];
+  return puzzleShell('p4',`<div class="workbench" aria-label="旧工作台上的三处痕迹">${rows}</div><div class="puzzle-row workbench-conclusion"><label>这些线头最可能是哪一步留下的？</label>${select('thread_origin',opts,'结合已找到的三处痕迹')}</div><p class="small">先翻看三处，才能把判断写进清点记录。</p>`);
 }
 function renderP5(){
   const opts1=[['lobby','门厅'],['laundry','洗衣房'],['stairs','南楼梯']];
@@ -513,37 +535,52 @@ function renderP5(){
   return puzzleShell('p5',`<div class="route-path">起点：活动室 → <span data-route-one>？</span> → <span data-route-two>？</span></div><div class="puzzle-grid"><div class="puzzle-row"><label>下一处</label>${select('step1',opts1)}</div><div class="puzzle-row"><label>再下一处</label>${select('step2',opts2)}</div></div>`);
 }
 function renderP6(){
-  const opts=[['scene','当晚原页'],['after','事后补写'],['official','正式报告']];
-  const rows=[
-    ['r1','“18:56 两名儿童暂留换衣桌，重新核对”'],
-    ['r2','“盘底有水，字更花；两条位置底带拿反”'],
-    ['r3','“我先以为孩子戴错，后确认是我拿错了两条位置底带”'],
-    ['r4','“南楼梯裂响时我停了一下，乔乔叫我”'],
-    ['r5','“儿童与工作人员经后勤通道离开旧楼，送往临时体育馆”'],
-    ['r6','“转移前完成二次核对，登记无误”']
+  const evidence=`<div class="cross-check-ledger" aria-label="报告和交接的三处核对">
+    <div><span>当晚交接</span><p>“两条位置底带拿反，已拆线重缝。”</p></div>
+    <div><span>正式报告</span><p>“转移前完成二次核对，登记无误。”</p></div>
+    <div><span>体育馆接收</span><p>四名孩子均有第二次核对记录。</p></div>
+  </div>`;
+  const fields=[
+    ['proof','如果要证明“当晚确有返工”，哪组材料能互相补充？',[
+      ['contemporary','当晚交接与事故后补记'],
+      ['report','正式报告与门厅箱签'],
+      ['phone','旧电话报修条与后门钥匙登记']]],
+    ['report_meaning','如何理解正式报告里的“二次核对无误”？',[
+      ['denial','它足以证明腕带从未缝错'],
+      ['omission','它记录了最终结果，却略过纠错过程'],
+      ['fabricated','它与所有原页正面冲突，不能采信']]],
+    ['arrival','“两名儿童被留下”是否意味着撤离时少了两人？',[
+      ['missing','是，腕带曾写错就代表有人失踪'],
+      ['arrived','不是，体育馆接收页有重新点名记录'],
+      ['unknown','所有接收页均无记录，无法判断']]]
   ];
-  return puzzleShell('p6',`<div class="puzzle-grid">${rows.map(r=>`<div class="puzzle-row"><label>${r[1]}</label>${select(r[0],opts)}</div>`).join('')}</div>`);
+  return puzzleShell('p6',evidence+`<div class="inference-grid">${fields.map(([id,question,opts],i)=>`<div class="inference-step"><span class="step-count">0${i+1}</span><h4>${question}</h4>${select(id,opts,'留下与原页相符的判断')}</div>`).join('')}</div>`);
 }
 function renderP7(){
-  const sources=[
-    ['thread','常规针线领用簿 + 腕带返工便条'],
-    ['recheck','临调页 + 腕带抄记 + 重新核对记录'],
-    ['bed','04 床当日上午维修停用'],
-    ['stair','19:16 南楼梯结构隐患停用'],
-    ['route','门厅积水 + 后门钥匙 + 后勤坡道记录']
+  // Each folder opens the actual recovered record, not a duplicated answer transcript.
+  const dossiers=[
+    ['a','甲组','19:12—19:16',['stairs_closed','lobby_water']],
+    ['b','乙组','旧日常 / 当晚返工',['thread_ledger','rework_note']],
+    ['c','丙组','当日上午 / 17:50',['bed_repair','temp_bed_full']],
+    ['d','丁组','19:18 / 后勤通行',['back_key','slope_access']],
+    ['e','戊组','临时登记 / 换衣桌',['handover_pan','group_note']]
   ];
+  const dossierHtml=`<div class="dossier-board" aria-label="五摞可以翻开的原始材料">${dossiers.map(([id,title,meta,recordIds])=>`<details class="dossier-sheet"><summary><strong>${title}</strong><span>${meta}</span><small>翻开这一摞</small></summary><p class="folder-intro">两份不同经手的纸被夹在一起；先看日期与记录原文，再决定它们能说明什么。</p><div class="folder-records">${recordIds.map(rid=>`<button type="button" data-open-record="${rid}">${escapeHtml(records[rid].title)}</button>`).join('')}</div></details>`).join('')}</div>`;
+  const opts=[['a','甲组'],['b','乙组'],['c','丙组'],['d','丁组'],['e','戊组']];
   const fragments=[
     ['g1','“红线缠在孩子腕上”'],['g2','“两个孩子被单独留下”'],['g3','“04 床空着”'],['g4','“南楼梯后来封死”'],['g5','“夜里有人打开后门”']
   ];
-  return puzzleShell('p7',`<div class="puzzle-grid">${fragments.map(x=>`<div class="pairing"><strong>${x[1]}</strong>${select(x[0],sources,'压上最直接的原始记录')}</div>`).join('')}</div>`);
+  return puzzleShell('p7',dossierHtml+`<div class="source-pairs">${fragments.map((x,i)=>`<div class="source-pair"><span class="fragment-index">0${i+1}</span><strong>${x[1]}</strong>${select(x[0],opts,'对应哪一组原页')}</div>`).join('')}</div>`);
 }
+
 function renderP8(){
-  const phases=[['water','进水'],['change','换衣'],['check','核对'],['move','转移']];
-  const events=[
-    ['c1','旧河道水位上涨'],['c2','低龄组先上二层'],['c3','发库存干衣'],['c4','剪下可辨姓名布签'],['c5','缝临时腕带'],
-    ['c6','乔乔指出位置带拿反'],['c7','拆线后重新缝合'],['c8','南楼梯停用'],['c9','后门钥匙借出'],['c10','体育馆重新点名']
-  ];
-  return puzzleShell('p8',`<div class="phase-grid">${events.map(c=>`<div class="phase-line"><strong>${c[1]}</strong>${select(c[0],phases,'归入阶段')}</div>`).join('')}</div>`);
+  const scenes=[
+    {key:'water',time:'18:12',title:'进水',opts:[['flood','门厅开始进水，低龄组随后往楼上移'],['clothes','拿库存干衣并剪下旧衣上的布签'],['redo','有人发现位置带缝错'],['south','楼梯裂响，原路线停用']]},
+    {key:'change',time:'18:34',title:'换衣',opts:[['flood','旧河道水位上涨'],['clothes','领出库存干衣，湿衣和布签随后分开'],['redo','把底带拆线重缝'],['south','改走后门坡道']]},
+    {key:'check',time:'18:56',title:'重核',opts:[['flood','门厅用毛巾挡水'],['clothes','开始剪湿衣姓名布签'],['redo','乔乔发现位置写反，两人留下重缝'],['south','体育馆重新点名']]},
+    {key:'move',time:'19:16',title:'转移',opts:[['flood','河道排水口回流'],['clothes','后勤领出干衣'],['redo','缝好第一批腕带'],['south','南楼梯停用，改找后勤出口']]}];
+  const optionsMissing=[['blank','进水从哪一分钟开始'],['signature','返工便条边缘“乔”字是谁写下的'],['key','四名孩子是否在体育馆重新点名']];
+  return puzzleShell('p8',`<div class="timeline-rebuild" aria-label="四段事故时间"><div class="timeline-tracks">${scenes.map(s=>`<div class="timeline-track"><div class="timeline-stamp"><span>${s.time}</span><strong>${s.title}</strong></div>${select(s.key,s.opts,'这一段从哪件事开始')}</div>`).join('')}</div><div class="timeline-gap"><strong>哪一格目前无法确定，必须留空？</strong>${select('omission',optionsMissing,'需要在清点记录中注明的缺口')}</div></div>`);
 }
 
 function capturePuzzleDraft(id,root){
@@ -566,8 +603,10 @@ function bindPuzzleEvents(){
   $$('[data-action="lobby-continue"]').forEach(b=>b.onclick=()=>{solvePuzzle('p0',false);requestAnimationFrame(()=>jumpTo('loc-activity',false));});
   $$('[data-next-location]').forEach(b=>b.onclick=()=>jumpTo('loc-'+b.dataset.nextLocation,false));
   $$('[data-action="hint"]').forEach(b=>b.onclick=()=>showHint(b.dataset.puzzle,b.closest('.puzzle')));
+  $$('[data-open-record]').forEach(b=>b.onclick=()=>openRecord(b.dataset.openRecord));
   $$('[data-action="submit"]').forEach(b=>b.onclick=()=>{capturePuzzleDraft(b.dataset.puzzle,b.closest('.puzzle'));submitPuzzle(b.dataset.puzzle,b.closest('.puzzle'));});
   $$('.order-controls button').forEach(b=>b.onclick=()=>moveOrderItem(b));
+  $$('[data-inspect]').forEach(b=>b.onclick=()=>{const key=b.dataset.inspect;state.inspectedP4=state.inspectedP4||[];if(!state.inspectedP4.includes(key)){state.inspectedP4.push(key);save();}const detail=b.nextElementSibling;detail.hidden=!detail.hidden;b.setAttribute('aria-expanded',String(!detail.hidden));b.textContent=b.dataset.label+'　'+(detail.hidden?'翻看':'收起');});
   $$('.choice-option').forEach(b=>b.onclick=()=>{
     const group=b.closest('[data-choice]');const hidden=$('input[type="hidden"]',group);hidden.value=b.dataset.value;
     $$('.choice-option',group).forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
@@ -581,9 +620,10 @@ function feedback(root,msg,type='error'){const f=$('.feedback',root);f.hidden=fa
 function submitPuzzle(id,root){
   let ok=false,msg='';
   if(id==='p1'){
-    const v=getVals(root,['flood','stock','wet','cut']);
-    ok=v.flood==='before'&&v.stock==='after'&&v.wet==='after'&&v.cut==='after';
-    if(!ok)msg=failPuzzle(id,'时间顺序有冲突；先只按纸上的时间分前后。','18:12—18:27 在前；18:34、18:37、18:41 都落在换衣开始以后。');
+    const seq=$$('[data-order-id="p1"] .order-item',root).map(el=>el.dataset.value);
+    const tag=getVals(root,['tag_role']).tag_role;
+    ok=seq.join(',')==='flood,stock,wet,cut'&&tag==='identity';
+    if(!ok)msg=failPuzzle(id,'时间先后或布签用途还没有接上；核对领用、收拢和剪裁的顺序。','进水在前，随后领干衣、收拢湿衣、剪取布签；原姓名布签之后被缝到位置底带上。');
   }
   if(id==='p2'){
     const v=getVals(root,['xm','dd','qq','ac']);
@@ -601,9 +641,9 @@ function submitPuzzle(id,root){
     if(!ok)msg=failPuzzle(id,'这四句话不能同时成立；先把“豆豆 / 陈雨宁”和两条位置底带分开看。','应留下“姓名布签能对应本人”和“折叠床 / 靠门观察位被颠倒”两句。');
   }
   if(id==='p4'){
-    const vals=['r1','r2','r3','r4'].filter(n=>root.querySelector(`[name="${n}"]`)?.checked);
-    ok=vals.length===2&&vals.includes('r1')&&vals.includes('r4');
-    if(!ok)msg=failPuzzle(id,'这两条依据还不能同时解释返工；把“为什么要改”和“改的时候怎么做”分开看。','应留下“位置底带与临调页颠倒”和“拆旧线后重新缝合”。');
+    const inspected=state.inspectedP4||[];
+    ok=['tag','band','thread'].every(x=>inspected.includes(x))&&getVals(root,['thread_origin']).thread_origin==='repair';
+    if(!ok)msg=failPuzzle(id,'先把桌边三处痕迹翻看完整，再对照针线领用和返工便条。','桌边剪断的旧线来自腕带拆线重缝，而不是用于标记儿童的特殊符号。');
   }
   if(id==='p5'){
     const v=getVals(root,['step1','step2']);
@@ -611,22 +651,20 @@ function submitPuzzle(id,root){
     if(!ok)msg=failPuzzle(id,'这条路在 19:16 以后不能连续通行。','从活动室经后勤内梯到洗衣房，再从后门坡道离开。');
   }
   if(id==='p6'){
-    const v=getVals(root,['r1','r2','r3','r4','r5','r6']);
-    const ans={r1:'scene',r2:'scene',r3:'after',r4:'after',r5:'official',r6:'official'};
-    ok=Object.keys(ans).every(k=>v[k]===ans[k]);
-    if(!ok)msg=failPuzzle(id,'有一句被放到了不符合来源时间的栏里；先看页角日期和纸张用途。','前两句来自当晚交接；中间两句是事后补写；最后两句出自正式报告。');
+    const v=getVals(root,['proof','report_meaning','arrival']);
+    ok=v.proof==='contemporary'&&v.report_meaning==='omission'&&v.arrival==='arrived';
+    if(!ok)msg=failPuzzle(id,'这三处需要不同的证据：返工的经过、报告说法的边界，以及到场人数。','当晚交接与补记相互印证返工；正式报告只写最终核对结果；体育馆接收页有到场复核。');
   }
   if(id==='p7'){
     const v=getVals(root,['g1','g2','g3','g4','g5']);
-    const ans={g1:'thread',g2:'recheck',g3:'bed',g4:'stair',g5:'route'};
-    ok=Object.keys(ans).every(k=>v[k]===ans[k]);
-    if(!ok)msg=failPuzzle(id,'至少有一个片段压错了来源；先找最直接、最少绕一步的记录。','04 床对应维修停用；后门对应积水、钥匙与后勤坡道；红线对应常规领用与返工。');
+    const ans={g1:'b',g2:'e',g3:'c',g4:'a',g5:'d'};
+    ok=Object.keys(ans).every(k=>v[k]===ans[k]) && new Set(Object.values(v)).size===5;
+    if(!ok)msg=failPuzzle(id,'五段传言还没有找到各自的原页，或有两张照片被压到同一摞纸上。','先逐摞展开摘记；线头看旧簿与返工，空床看维修与调床，离开方向看钥匙与坡道。');
   }
   if(id==='p8'){
-    const v=getVals(root,['c1','c2','c3','c4','c5','c6','c7','c8','c9','c10']);
-    const ans={c1:'water',c2:'water',c3:'change',c4:'change',c5:'change',c6:'check',c7:'check',c8:'move',c9:'move',c10:'move'};
-    ok=Object.keys(ans).every(k=>v[k]===ans[k]);
-    if(!ok)msg=failPuzzle(id,'有事件落在了不合适的阶段；按它在当晚主要解决什么来归类。','水位和上楼属于进水；干衣、剪布签、缝腕带属于换衣；发现拿反和返工属于核对；楼梯停用、借钥匙、体育馆点名属于转移。');
+    const v=getVals(root,['water','change','check','move','omission']);
+    ok=v.water==='flood'&&v.change==='clothes'&&v.check==='redo'&&v.move==='south'&&v.omission==='signature';
+    if(!ok)msg=failPuzzle(id,'还有一处时间或证据边界没有接上；别替残缺纸页猜经手人。','进水 18:12、换衣 18:34、重核 18:56、南楼梯停用 19:16。便条边缘的“乔”字不能确定是谁写的。');
   }
   if(ok){
     feedback(root,'纸面上的前后关系暂时能接上','success');
@@ -640,8 +678,8 @@ function moveOrderItem(button){
   const li=button.closest('.order-item');const list=li.parentElement;const dir=button.dataset.move;
   if(dir==='up'&&li.previousElementSibling)list.insertBefore(li,li.previousElementSibling);
   if(dir==='down'&&li.nextElementSibling)list.insertBefore(li.nextElementSibling,li);
-  $$('.order-item',list).forEach((n,i)=>n.querySelector('span').textContent=(i+1)+'. '+n.dataset.value);
-  state.drafts=state.drafts||{};state.drafts.p3Order=$$('.order-item',list).map(n=>n.dataset.value);save();
+  $$('.order-item',list).forEach((n,i)=>{const first=n.querySelector('span');first.textContent=(i+1)+'. '+(first.textContent.replace(/^\d+\.\s*/,''));});
+  state.drafts=state.drafts||{};const orderId=list.dataset.orderId||'p3';state.drafts[orderId+'Order']=$$('.order-item',list).map(n=>n.dataset.value);save();
 }
 
 function updateQuestion(){
@@ -685,12 +723,12 @@ function currentQuestion(){
   }
   if(!state.puzzles.p6){
     if(!visited('supplement')) return '当晚的纸后来被怎样收进正式报告？';
-    return '同一件事写在不同年代的纸上，哪些属于现场，哪些属于后来补写？';
+    return '报告里的“核对无误”是否意味着此前没有出过错？';
   }
   if(!state.puzzles.p7) return '网上留下的是碎片；原始记录能不能一张张压回它们下面？';
   if(!state.puzzles.p8) return '最后只剩时间：把整晚收回四个阶段。';
   if(!state.unlocked.exit) return '';
-  return '21:44 这一行没有经手人。';
+  return '21:57 这一行没有经手人。';
 }
 function refreshAll(){
   renderSections();renderAnchors();renderNav();renderRecordList();renderPuzzles();
@@ -729,6 +767,8 @@ function installImageFallbacks(){
 
 function wireGlobalEvents(){
   updateContinue();loadSettings();applySettings();installImageFallbacks();
+  $('#recordSearch').addEventListener('input',e=>{recordSearchText=e.target.value;renderRecordList();});
+  $('#clearRecordSearch').addEventListener('click',()=>{recordSearchText='';$('#recordSearch').value='';renderRecordList();$('#recordSearch').focus();});
   let scrollSaveTimer=null;
   $$('.story-section').forEach(scene=>scene.addEventListener('scroll',()=>{
     if(!scene.classList.contains('active-scene'))return;
