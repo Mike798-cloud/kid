@@ -372,7 +372,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,su
 .puzzle-p7{width:min(58rem,95%)}
 .puzzle-p8{width:min(62rem,96%)}
 .puzzle:before{
-  content:"推理";position:absolute;left:.85rem;top:2.15rem;
+  content:"纸面核对";position:absolute;left:.85rem;top:2.15rem;
   color:#751018;font:600 .66rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;
   letter-spacing:.26em;writing-mode:vertical-rl;
 }
@@ -441,7 +441,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,su
 .feedback.success{border-color:#676058;color:#302c28}
 .hint-box{margin-top:1rem;color:#665f57;font-size:.88rem}
 .puzzle.solved{padding-top:1.8rem;padding-bottom:1.95rem}
-.puzzle.solved:before{content:"已接上"}
+.puzzle.solved:before{content:"已核"}
 
 /* ---------- right record drawer ---------- */
 .right-records{
@@ -998,7 +998,7 @@ body{background:#020202}
 .puzzle-p6 .puzzle-row{break-inside:avoid;display:block;padding:.8rem .2rem 1rem;border-bottom:1px solid rgba(0,0,0,.12)}
 .puzzle-p6 .choice-line{margin-top:.4rem}
 .puzzle-p7{width:min(58rem,94%);background:transparent;color:#ddd6cd;clip-path:none;padding-left:0;padding-right:0}
-.puzzle-p7:before{content:"对应关系";writing-mode:horizontal-tb;left:0;top:0}
+.puzzle-p7:before{content:"来源核对";writing-mode:horizontal-tb;left:0;top:0}
 .puzzle-p7 h3,.puzzle-p7 .question{color:#ddd6cd}
 .puzzle-p7 .pairing{border-bottom:1px solid #292521;color:#d7d0c7}
 .puzzle-p7 .choice-option{color:#a9a198!important}
@@ -1221,7 +1221,7 @@ body{background:#020202}
 .puzzle-p3b{background:#d0c8b9}.puzzle-p3b .evidence-check{padding:.8rem .25rem}.puzzle-p3b .evidence-check input{appearance:none;width:.85rem;height:.85rem;border:1px solid #645a50;margin-top:.34rem;transform:rotate(-4deg)}.puzzle-p3b .evidence-check input:checked{background:linear-gradient(135deg,transparent 38%,#8a1117 39% 51%,transparent 52%),linear-gradient(45deg,transparent 47%,#8a1117 48% 58%,transparent 59%)}
 .puzzle-p4{background:linear-gradient(96deg,#c6bba9,#d1c7b8 55%,#c7bcaa)}
 .puzzle-p5{background:linear-gradient(90deg,transparent 0 3rem,rgba(127,43,44,.15) 3rem 3.08rem,transparent 3.08rem),repeating-linear-gradient(to bottom,transparent 0 2rem,rgba(69,62,54,.15) 2rem 2.06rem),#c9c0b1}
-.puzzle-p6{background:#d1ccc1;border-top:6px solid #bbb4a9;clip-path:none!important;transform:none!important}.puzzle-p6:before{content:"归档"}
+.puzzle-p6{background:#d1ccc1;border-top:6px solid #bbb4a9;clip-path:none!important;transform:none!important}.puzzle-p6:before{content:"来源核对"}
 .puzzle-p7{background:linear-gradient(90deg,rgba(77,66,54,.055) 1px,transparent 1px),#c8bfae;background-size:9rem 100%}
 .puzzle-p8{background:repeating-linear-gradient(to bottom,transparent 0 2.25rem,rgba(60,55,49,.15) 2.25rem 2.31rem),#cdc6ba;clip-path:polygon(.2% .4%,99.8% 0,100% 99.4%,.1% 100%)}
 
@@ -1273,4 +1273,86 @@ body{background:#020202}
   .chapter-spread .scene-frame img,.chapter-spread.spread-right .scene-frame img{
     grid-column:1/-1!important;width:calc(100% + 1.7rem)!important;max-width:none!important;height:auto!important;margin:.4rem -.85rem 1rem!important;
   }
+}
+
+/* ===== final production polish ===== */
+.record-group-title{
+  margin:1.45rem 0 .38rem;padding:.34rem 0 .28rem;
+  color:#777068;font:500 .67rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.16em;border-bottom:1px solid #1d1a18;
+}
+.record-group-title:first-child{margin-top:0}
+.scene-transition{
+  grid-column:2/9;width:min(100%,42rem);margin:2.2rem 0 2.8rem;padding:1.05rem 1.15rem 1.15rem;
+  border-left:1px solid #6e1017;background:linear-gradient(90deg,rgba(112,16,23,.055),transparent 76%);
+}
+.scene-transition p{margin:0 0 .85rem;color:#aaa299;line-height:1.85}
+.scene-transition.settled{opacity:.78}
+.chapter-forward,.chapter-next button,.prologue-actions button{
+  color:#c9c1b8!important;border-bottom:1px dotted #786f67!important;padding:.15rem 0!important;
+}
+.chapter-forward:after,.chapter-next button:after,.prologue-actions button:after{content:"  →";color:#801018}
+.prologue-actions{margin-top:1.7rem}
+.chapter-next{grid-column:2/8;width:min(100%,39rem);margin:2.2rem 0 1rem;padding-top:.85rem;border-top:1px solid #1d1917}
+.rebuild-intro{grid-column:2/9!important;display:block!important;max-width:46rem!important;margin:.2rem 0 1.9rem!important;padding:.65rem 0 .75rem 1.15rem!important;border-left:1px solid #4f1216!important;border-top:0!important;border-bottom:0!important}
+.rebuild-intro p{margin:.35rem 0!important;color:#bbb3aa;line-height:1.95}
+.rebuild-intro p+p{margin-top:.85rem!important}
+
+.image-missing{display:none!important}
+.scene-frame.has-image-error{display:block!important;min-height:auto!important;height:auto!important;background:transparent!important}
+.scene-frame.has-image-error .image-fallback{margin:0;padding:1rem 1.05rem;background:#090807;border:1px solid #211c19;border-left:1px solid #721017}
+.scene-frame.has-image-error .image-fallback p{margin:0 0 .55rem;color:#8f8880;font-size:.82rem;line-height:1.6}
+.scene-frame.has-image-error .image-fallback button{font-size:.76rem}
+
+@media (min-width:901px){
+  /* Explicit one-row placement prevents loaded artwork from collapsing into a zero-height row. */
+  .chapter-spread,.chapter-spread.spread-right{
+    display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;grid-template-rows:max-content!important;
+    min-height:auto!important;height:auto!important;align-items:start!important;align-self:start!important;overflow:visible!important;
+    margin-bottom:2.9rem!important;
+  }
+  .chapter-spread > .scene-frame,.chapter-spread.spread-right > .scene-frame{
+    display:block!important;width:auto!important;min-width:0!important;min-height:auto!important;height:auto!important;
+    grid-row:1!important;margin:0!important;align-self:start!important;overflow:hidden!important;background:#030303;
+  }
+  .chapter-spread > .scene-frame img,.chapter-spread.spread-right > .scene-frame img{
+    display:block!important;position:static!important;width:100%!important;height:auto!important;max-width:100%!important;margin:0!important;
+  }
+  .chapter-spread > .chapter-copy,.chapter-spread.spread-right > .chapter-copy{
+    width:auto!important;min-width:0!important;height:auto!important;grid-row:1!important;align-self:center!important;position:relative!important;z-index:4!important;
+  }
+  .chapter-spread > .scene-frame{grid-column:1/10!important}
+  .chapter-spread > .chapter-copy{grid-column:9/13!important;margin:0 0 0 -2.5rem!important}
+  .chapter-spread.spread-right > .scene-frame{grid-column:4/13!important}
+  .chapter-spread.spread-right > .chapter-copy{grid-column:1/6!important;margin:0 -2.5rem 0 0!important}
+
+  .story-section[data-location="prologue"] .chapter-spread > .scene-frame{grid-column:1/9!important;width:auto!important;flex-basis:auto!important}
+  .story-section[data-location="prologue"] .chapter-spread > .chapter-copy{grid-column:8/13!important;width:auto!important;flex-basis:auto!important;margin-left:-1.7rem!important}
+  .story-section[data-location="activity"] .chapter-spread > .scene-frame{grid-column:1/11!important}
+  .story-section[data-location="activity"] .chapter-spread > .chapter-copy{grid-column:10/13!important;margin-left:-1.5rem!important}
+  .story-section[data-location="wardrobe"] .chapter-spread > .scene-frame{grid-column:1/9!important}
+  .story-section[data-location="wardrobe"] .chapter-spread > .chapter-copy{grid-column:8/13!important;margin-left:-1.5rem!important}
+  .story-section[data-location="dorm"] .chapter-spread > .scene-frame{grid-column:1/13!important}
+  .story-section[data-location="dorm"] .chapter-spread > .chapter-copy{grid-column:1/6!important;margin:0 0 0 1rem!important}
+  .story-section[data-location="records"] .chapter-spread > .scene-frame{grid-column:2/11!important}
+  .story-section[data-location="records"] .chapter-spread > .chapter-copy{grid-column:1/5!important;margin:0 -2rem 0 0!important}
+  .story-section[data-location="office"] .chapter-spread > .scene-frame{grid-column:8/13!important}
+  .story-section[data-location="office"] .chapter-spread > .chapter-copy{grid-column:1/9!important;margin:0 -1rem 0 0!important}
+  .story-section[data-location="laundry"] .chapter-spread > .scene-frame{grid-column:4/13!important}
+  .story-section[data-location="laundry"] .chapter-spread > .chapter-copy{grid-column:1/6!important;margin:0 -2rem 0 0!important}
+  .story-section[data-location="stairs"] .chapter-spread > .scene-frame{grid-column:3/13!important}
+  .story-section[data-location="stairs"] .chapter-spread > .chapter-copy{grid-column:1/6!important;margin-right:-1.2rem!important}
+
+  .chapter-spread:has(.scene-frame.has-image-error) > .scene-frame{grid-column:1/5!important}
+  .chapter-spread:has(.scene-frame.has-image-error) > .chapter-copy{grid-column:5/13!important;margin:0!important}
+  body[data-scene="prologue"] .question-line{display:none}
+}
+
+@media (max-width:900px){
+  .record-group-title{margin-top:1.15rem}
+  .scene-transition,.chapter-next,.rebuild-intro{grid-column:1/-1!important;width:100%!important;margin-left:0!important;margin-right:0!important}
+  .scene-transition{margin-top:1.25rem!important;margin-bottom:1.75rem!important}
+  .rebuild-intro{padding-left:.85rem!important}
+  body[data-scene="prologue"] .question-line{display:none}
+  .scene-frame.has-image-error{display:block!important;margin:.45rem 0 1rem!important;width:100%!important}
 }

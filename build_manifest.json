@@ -1,23 +1,28 @@
 {
   "project": "槐湾孤儿院",
-  "build": "editorial-comic-v15",
+  "build": "editorial-comic-v16-final",
   "format": "static-web",
-  "save_version": 10,
-  "build_entry": "BUILD_WINDOWS.bat -> tools/build.py",
+  "save_version": 11,
+  "package_scope": "runtime-only",
   "audio_assets": 0,
   "video_assets": 0,
-  "svg_assets_referenced": 0,
-  "image_assets_referenced": 17,
-  "runtime_image_reuse_forbidden": true,
-  "near_duplicate_image_guard": "whole-image 16x16 dHash distance < 40 fails build",
+  "image_assets_referenced": 18,
   "record_entries_defined": 48,
   "record_entries_referenced": 48,
-  "puzzle_count": 10,
-  "naming_pass": "compound surnames preserved; Ouyang Che image filenames normalized",
-  "opening_flow": "P0 -> activity -> read activity roll -> wardrobe",
-  "spatial_pass": "activity room fixed to second-floor east wing; east service stair connects to laundry/back slope",
-  "mobile_pass": "mobile dock remains available outside rainnight/exit climax scenes",
-  "built_at_utc": "2026-10-07T16:09:22Z",
+  "puzzle_slots": 10,
+  "flow": "prologue -> lobby -> activity -> wardrobe -> dorm -> records -> office -> laundry -> stairs -> supplement -> rebuild -> rainnight -> exit",
+  "quality_passes": [
+    "opening_transition",
+    "scene_image_layout",
+    "wristband_evidence_consistency",
+    "pre-puzzle_answer_leakage",
+    "natural_room_transitions",
+    "record_grouping",
+    "mobile_overflow",
+    "missing_image_fallback",
+    "visible_copy_cleanup",
+    "runtime_asset_pruning"
+  ],
   "files": [
     {
       "path": ".nojekyll",
@@ -28,6 +33,11 @@
       "path": "assets/final/activity.jpg",
       "bytes": 376817,
       "sha256": "2daaeec27b526e5daf941f68dcf31f45d0a055083fdcc06a1254ac21361ad590"
+    },
+    {
+      "path": "assets/final/activity_beds.jpg",
+      "bytes": 237195,
+      "sha256": "2955eaeebba2fcc8e97abab45da12fe9f1c3228f5f41b77ced8c41ec91c142ef"
     },
     {
       "path": "assets/final/bedroom.jpg",
@@ -80,11 +90,6 @@
       "sha256": "84bfed4a56a14d2a37ce0b344a5fecbbb558ad46b1c2c37e3c983f4fbbdaf393"
     },
     {
-      "path": "assets/final/ouyangche_portrait.jpg",
-      "bytes": 162537,
-      "sha256": "4495d1f13f249fe9d02d02ec4f509e36e91ccf7bbae0d84e6307b7686ceaf3f2"
-    },
-    {
       "path": "assets/final/shenhe_portrait.jpg",
       "bytes": 160410,
       "sha256": "e897f8d63a58b31a6c9980f12f654646ad47aa1681fb26470a958e47bee53b18"
@@ -93,6 +98,11 @@
       "path": "assets/final/stairs.jpg",
       "bytes": 159840,
       "sha256": "99439de1b78355cd5efa26171c23b255fdcd5b1426f0d53aec36868f5957b381"
+    },
+    {
+      "path": "assets/final/wardrobe.jpg",
+      "bytes": 209538,
+      "sha256": "72de1105f10372cbc4cea48a1ac4306c3ab5902cf85417e81ab88004ca067506"
     },
     {
       "path": "assets/final/wardrobe_past.jpg",
@@ -111,18 +121,18 @@
     },
     {
       "path": "game.js",
-      "bytes": 63292,
-      "sha256": "ec36203781c28d6d4125a78b4ec5cfafc3db1ff8261e961fa6fcdf23f71dd8be"
+      "bytes": 64099,
+      "sha256": "3b30e555c7e6003595fd73a6c2a38d997ee6f0daedde9d9a18531d67455e7ec8"
     },
     {
       "path": "index.html",
-      "bytes": 59472,
-      "sha256": "84cf8eaca0a170d7083aae14422afdae91a0ec02deefbcd423107e3ff3e6cec9"
+      "bytes": 54114,
+      "sha256": "7abee71a5fbbe798fc791da7e4f57f23b364f021ab84c4f64fb2dc982c249f53"
     },
     {
       "path": "styles.css",
-      "bytes": 65614,
-      "sha256": "fc2948a30abbad07ddf397f761771461be92f328bd7c3d1920a2fcf85a79db70"
+      "bytes": 71914,
+      "sha256": "42d4eca91e7823c49c04bd88bb289f21f654e91c495b5984bb694f55b6e55232"
     }
   ]
 }
