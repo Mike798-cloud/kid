@@ -1,12 +1,12 @@
 {
   "project": "槐湾孤儿院",
-  "build": "v35-precise-evidence-workspace",
+  "build": "v39-natural-inference",
   "scope": "runtime-only",
   "format": "static-web",
-  "save_version": 16,
-  "image_assets_referenced": 11,
-  "record_entries_defined": 58,
-  "record_entries_referenced": 58,
+  "save_version": 20,
+  "image_assets_referenced": 14,
+  "record_entries_defined": 59,
+  "record_entries_referenced": 59,
   "puzzle_slots": 9,
   "story_sections": 13,
   "audio_assets": 0,
@@ -53,6 +53,11 @@
       "sha256": "93c8653f7fc80694b2a809e057ca29a2448df6f54b87c7b57a6e13f2c95bb696"
     },
     {
+      "path": "assets/final/laundry_pause.jpg",
+      "bytes": 488094,
+      "sha256": "97ea51f1848bcb1591baa4972262922ebbe91e79b48a9feae7b83332abcfde7f"
+    },
+    {
       "path": "assets/final/laundry_station.jpg",
       "bytes": 515228,
       "sha256": "cb9a74fc7186015e7eb073bb80efd51d5a58e85e8dc862e6be6e4e00ca606568"
@@ -63,9 +68,19 @@
       "sha256": "8df1b69c786143dc71303fe9d83a2ef82f74f59db429bd17f606e996972e8418"
     },
     {
+      "path": "assets/final/records_scene.jpg",
+      "bytes": 437616,
+      "sha256": "8d67af60680715085623acbd6ef4de94e41071a5329ae8cb0c2bba333f729384"
+    },
+    {
       "path": "assets/final/stairs.jpg",
       "bytes": 537987,
       "sha256": "05312d5ad030949dd949881b402185dfd46fd3204459b286ef4452c162e60f97"
+    },
+    {
+      "path": "assets/final/teacher_book.jpg",
+      "bytes": 364986,
+      "sha256": "e6ed5150856e40d7c473dd16d5ea2909456160c3fdc9db4290ff19747f4f1283"
     },
     {
       "path": "assets/final/wardrobe.jpg",
@@ -79,28 +94,30 @@
     },
     {
       "path": "assets/fonts/reading-400.woff",
-      "bytes": 248912,
-      "sha256": "371009d7ca0229429482890286d0afb5f5a638f50092877e2b0a531bf55afc22"
+      "bytes": 245528,
+      "sha256": "113ac01c92b3894cfb082e9fbfb09b5516a3a40baf33dbc4351740562ac90aa3"
     },
     {
       "path": "assets/fonts/reading-700.woff",
-      "bytes": 253860,
-      "sha256": "59ed6f51954912870d8e9ecf118e70410cd046054a43d00646a1a9cf1486deeb"
+      "bytes": 250608,
+      "sha256": "286c0311ced9f9882fb4ef4bf100c11782073801734819e56524894bacc3dda0"
     },
     {
       "path": "game.js",
-      "bytes": 68517,
-      "sha256": "4816aaa61a382cb24cf1aee907887d10cfd00fa05d116f05a4d680ae014ca941"
+      "bytes": 62215,
+      "sha256": "2121c5a4b631624b287045320c98eb28a823dbaeaf1da9d634dd507463da22e1"
     },
     {
       "path": "index.html",
-      "bytes": 34035,
-      "sha256": "aa4d259220294c1ccdf8a70b235e3d3352c09b44e31afb10762235f6740edbd2"
+      "bytes": 42052,
+      "sha256": "2318aef22f099e5189e53ab8929d8b9218d8a12ee01b5908c44cde39caeadd62"
     },
     {
       "path": "styles.css",
-      "bytes": 25368,
-      "sha256": "6a425700c8d7ca4945cd701701b10db8768ac7e538ce13d45aa4794b6ad485fe"
+      "bytes": 31082,
+      "sha256": "92307aa35cfef322ad5529af17181b7ce5bc82a9e14d40735bbba05d2bdb6812"
     }
-  ]
+  ],
+  "reasoning_puzzles": 5,
+  "filing_transitions": 4
 }
