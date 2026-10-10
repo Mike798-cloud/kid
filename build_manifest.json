@@ -1,14 +1,14 @@
 {
   "project": "槐湾孤儿院",
-  "build": "v39-natural-inference",
+  "build": "v40-support-and-thanks",
   "scope": "runtime-only",
   "format": "static-web",
-  "save_version": 20,
-  "image_assets_referenced": 14,
+  "save_version": 21,
+  "image_assets_referenced": 16,
   "record_entries_defined": 59,
   "record_entries_referenced": 59,
   "puzzle_slots": 9,
-  "story_sections": 13,
+  "story_sections": 14,
   "audio_assets": 0,
   "build_entry": "BUILD_WINDOWS.bat -> tools/build.py",
   "files": [
@@ -94,30 +94,42 @@
     },
     {
       "path": "assets/fonts/reading-400.woff",
-      "bytes": 245528,
-      "sha256": "113ac01c92b3894cfb082e9fbfb09b5516a3a40baf33dbc4351740562ac90aa3"
+      "bytes": 248972,
+      "sha256": "8f2ae8ab0155565255297052158f787b06c938e8e901186ec1756371f32e1b89"
     },
     {
       "path": "assets/fonts/reading-700.woff",
-      "bytes": 250608,
-      "sha256": "286c0311ced9f9882fb4ef4bf100c11782073801734819e56524894bacc3dda0"
+      "bytes": 254164,
+      "sha256": "674ff3f4cb1693be9547a76a611b1a814d72f96a7964ddbe47f72f63be4aa6b9"
+    },
+    {
+      "path": "assets/support/paycode.png",
+      "bytes": 159440,
+      "sha256": "e0954ed0bf756f20b93bc544a48bc76de173cf81ace582d4e0bee393e6021e2b"
+    },
+    {
+      "path": "assets/support/xiaohongshu-abc-studio.jpg",
+      "bytes": 207880,
+      "sha256": "6d4dcc35b538112898ae293054310b5ea69b69d3e324c06890cc8e4c9d1851f1"
     },
     {
       "path": "game.js",
-      "bytes": 62215,
-      "sha256": "2121c5a4b631624b287045320c98eb28a823dbaeaf1da9d634dd507463da22e1"
+      "bytes": 66456,
+      "sha256": "83c40c00a7c66791e9412c068e167e0f03d01f153fdbc21266d16baf7c716bb0"
     },
     {
       "path": "index.html",
-      "bytes": 42052,
-      "sha256": "2318aef22f099e5189e53ab8929d8b9218d8a12ee01b5908c44cde39caeadd62"
+      "bytes": 46465,
+      "sha256": "7e787e25abf07ac98fd66672abe71cdcd14eae35b262cbb3c479e2a40ff0d861"
     },
     {
       "path": "styles.css",
-      "bytes": 31082,
-      "sha256": "92307aa35cfef322ad5529af17181b7ce5bc82a9e14d40735bbba05d2bdb6812"
+      "bytes": 35574,
+      "sha256": "978867ba76b762c4d68eed47c1d8aca297a66caf401c97ed2bb3ed76e5a63fa0"
     }
   ],
   "reasoning_puzzles": 5,
-  "filing_transitions": 4
+  "filing_transitions": 4,
+  "scene_photos_referenced": 14,
+  "support_images_referenced": 2
 }
